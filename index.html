@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>TigerFong · 个人主页</title>
+    <meta name="description" content="前端工程师 / 把复杂的问题，做成简单的产品。">
+    <meta name="theme-color" content="#f7f8fa" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#14171c" media="(prefers-color-scheme: dark)">
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js"></script>
+</head>
+<body>
+
+    <button class="theme-toggle" id="theme-toggle" aria-label="切换深色 / 浅色主题">☾</button>
+
+    <button class="menu-btn" id="menuBtn" aria-label="打开菜单" aria-expanded="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="1.8" stroke-linecap="round">
+            <path d="M4 7h16M4 12h16M4 17h16"/>
+        </svg>
+    </button>
+
+    <div class="menu-overlay" id="menuOverlay"></div>
+
+    <aside class="menu-panel" id="menuPanel" aria-hidden="true">
+        <div class="menu-header">
+            <div>
+                <div class="menu-title">TigerFong</div>
+                <div class="menu-subtitle">Personal Site</div>
+            </div>
+            <button class="menu-close" id="menuClose" aria-label="关闭菜单">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                     stroke-width="1.8" stroke-linecap="round">
+                    <path d="M6 6l12 12M18 6L6 18"/>
+                </svg>
+            </button>
+        </div>
+
+        <nav class="menu-group">
+            <div class="menu-group-label">導航</div>
+            <a class="menu-item" href="#about">关于我</a>
+            <a class="menu-item" href="#work">作品集</a>
+            <a class="menu-item" href="#contact">联系我</a>
+        </nav>
+
+        <nav class="menu-group">
+            <div class="menu-group-label">連結</div>
+            <a class="menu-item" href="https://github.com/TigerFong" target="_blank" rel="noopener">GitHub</a>
+            <a class="menu-item" href="https://b23.tv/E1b5htR" target="_blank" rel="noopener">Bilibili</a>
+            <a class="menu-item" href="mailto:tigerfong49@gmail.com">Email</a>
+        </nav>
+    </aside>
+
+    <div class="wrap">
+
+        <!-- ==================== 顶部标语 ==================== -->
+        <header class="hero reveal">
+            <p class="eyebrow">Hello, I'm</p>
+            <h1>TigerFong <span class="status-dot"></span></h1>
+            <p class="slogan" id="typewriter"></p>
+        </header>
+
+        <main>
+
+            <!-- ==================== 关于我 ==================== -->
+            <section id="about" class="section about reveal">
+                <div class="sec-head">
+                    <h2>
+                        <svg class="pixel-icon" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                            <rect x="5" y="1" width="6" height="5"/>
+                            <rect x="6" y="2" width="2" height="2" fill="var(--bg)"/>
+                            <rect x="9" y="2" width="2" height="2" fill="var(--bg)"/>
+                            <rect x="4" y="7" width="8" height="7"/>
+                            <rect x="3" y="13" width="3" height="2"/>
+                            <rect x="10" y="13" width="3" height="2"/>
+                        </svg>
+                        关于我
+                    </h2>
+                    <span class="en">About</span>
+                </div>
+
+                <div class="editor" id="editor">
+                    <div class="editor-bar">
+                        <div class="editor-filename">about.js</div>
+                        <div class="editor-controls">
+                            <button class="ctrl-btn ctrl-min" id="editorMin" aria-label="最小化"></button>
+                            <button class="ctrl-btn ctrl-max" id="editorMax" aria-label="最大化"></button>
+                            <button class="ctrl-btn ctrl-close" id="editorClose" aria-label="关闭"></button>
+                        </div>
+                    </div>
+
+                    <div class="editor-body" id="editorBody">
+                        <div class="editor-line">
+                            <span class="editor-num">1</span>
+                            <span class="editor-text"><span class="kw">const</span> <span class="var">me</span> = {</span>
+                        </div>
+                        <div class="editor-line">
+                            <span class="editor-num">2</span>
+                            <span class="editor-text">    <span class="prop">intro</span>: <span class="str">'一个总想把手里的想法变成实物的人。'</span>,</span>
+                        </div>
+                        <div class="editor-line">
+                            <span class="editor-num">3</span>
+                            <span class="editor-text"></span>
+                        </div>
+                        <div class="editor-line">
+                            <span class="editor-num">4</span>
+                            <span class="editor-text">    <span class="prop">doing</span>: [</span>
+                        </div>
+                        <div class="editor-line">
+                            <span class="editor-num">5</span>
+                            <span class="editor-text">        <span class="str">'会写前端，也会碰后端'</span>,</span>
+                        </div>
+                        <div class="editor-line">
+                            <span class="editor-num">6</span>
+                            <span class="editor-text">        <span class="str">'做过网页，也做过桌面程序'</span></span>
+                        </div>
+                        <div class="editor-line">
+                            <span class="editor-num">7</span>
+                            <span class="editor-text">    ],</span>
+                        </div>
+                        <div class="editor-line">
+                            <span class="editor-num">8</span>
+                            <span class="editor-text"></span>
+                        </div>
+                        <div class="editor-line">
+                            <span class="editor-num">9</span>
+                            <span class="editor-text">    <span class="prop">habit</span>: <span class="str">'比起把需求照单实现，更习惯先问一句「这事该不该这么做」，'</span> +</span>
+                        </div>
+                        <div class="editor-line">
+                            <span class="editor-num">10</span>
+                            <span class="editor-text">            <span class="str">'想清楚了再动手，然后一口气把它做出来。'</span>,</span>
+                        </div>
+                        <div class="editor-line">
+                            <span class="editor-num">11</span>
+                            <span class="editor-text"></span>
+                        </div>
+                        <div class="editor-line">
+                            <span class="editor-num">12</span>
+                            <span class="editor-text">    <span class="prop">pile</span>: [<span class="str">'写过的代码'</span>, <span class="str">'废弃的草稿'</span>, <span class="str">'做到一半的游戏'</span>],</span>
+                        </div>
+                        <div class="editor-line">
+                            <span class="editor-num">13</span>
+                            <span class="editor-text">    <span class="comment">// 零散地堆在手边，一直没舍得丢。</span></span>
+                        </div>
+                        <div class="editor-line">
+                            <span class="editor-num">14</span>
+                            <span class="editor-text">    <span class="comment">// 它们迟早会各自长成该有的样子。</span></span>
+                        </div>
+                        <div class="editor-line">
+                            <span class="editor-num">15</span>
+                            <span class="editor-text"></span>
+                        </div>
+                        <div class="editor-line">
+                            <span class="editor-num">16</span>
+                            <span class="editor-text">    <span class="prop">role</span>: <span class="str">'能把想法独立落成产品的全栈型工程师'</span>,</span>
+                        </div>
+                        <div class="editor-line">
+                            <span class="editor-num">17</span>
+                            <span class="editor-text">    <span class="prop">focus</span>: [<span class="str">'交互体验'</span>, <span class="str">'工程效率'</span>]</span>
+                        </div>
+                        <div class="editor-line">
+                            <span class="editor-num">18</span>
+                            <span class="editor-text">};</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="editor-restore" id="editorRestore" hidden>
+                    <button type="button" id="editorRestoreBtn">重新打开 about.js</button>
+                </div>
+
+                <ul class="chips">
+                    <li>前端工程</li>
+                    <li>独立开发</li>
+                    <li>AI 集成</li>
+                    <li>游戏开发</li>
+                    <li>全栈</li>
+                </ul>
+            </section>
+
+            <!-- ==================== 作品集 ==================== -->
+            <section id="work" class="section reveal">
+                <div class="sec-head">
+                    <h2>
+                        <svg class="pixel-icon" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                            <rect x="2" y="6" width="12" height="8"/>
+                            <rect x="6" y="6" width="4" height="8" fill="var(--bg)"/>
+                            <rect x="3" y="3" width="10" height="3"/>
+                            <rect x="7" y="3" width="2" height="6" fill="var(--bg)"/>
+                        </svg>
+                        作品集
+                    </h2>
+                    <span class="en">Selected Works</span>
+                </div>
+
+                <div class="cmd">
+                    <div class="cmd-bar">
+                        <div class="cmd-tab">
+                            <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                                <path d="M2 3l6 5-6 5V3zm12 10h-7v-1.5h7V13z"/>
+                            </svg>
+                            <span>命令提示字元</span>
+                            <button class="cmd-tab-close" aria-hidden="true">✕</button>
+                        </div>
+                        <div class="cmd-controls">
+                            <button class="cmd-ctrl cmd-min" aria-label="最小化"></button>
+                            <button class="cmd-ctrl cmd-max" aria-label="最大化"></button>
+                            <button class="cmd-ctrl cmd-close" aria-label="关闭"></button>
+                        </div>
+                    </div>
+
+                    <div class="cmd-body">
+                        <div class="cmd-line">Microsoft Windows [版本 10.0.22631.4602]</div>
+                        <div class="cmd-line">(c) Microsoft Corporation. 著作權所有，並保留一切權利。</div>
+                        <div class="cmd-line">&nbsp;</div>
+
+                        <div class="cmd-line">
+                            <span class="cmd-path">C:\Users&gt;</span><span class="cmd-input">dir projects /b /o-d</span>
+                        </div>
+                        <div class="cmd-line">yuzusoft-guide</div>
+                        <div class="cmd-line">desktop-pet</div>
+                        <div class="cmd-line">&nbsp;</div>
+
+                        <div class="cmd-line">
+                            <span class="cmd-path">C:\Users&gt;</span><span class="cmd-input">type projects\yuzusoft-guide\info.txt</span>
+                        </div>
+                        <div class="cmd-line">&nbsp;</div>
+
+                        <div class="cmd-item">
+                            <div class="cmd-item-head">
+                                <span class="cmd-date">2026/10 — 至今</span>
+                                <span class="cmd-name">yuzusoft-guide</span>
+                            </div>
+                            <div class="cmd-desc">
+                                柚子社历代作品的角色資料、劇情簡介與全路線攻略的非官方粉絲站。
+                                以 Flask 提供 API、原生 JS 渲染前端，含全站搜尋、命運邂逅配對與 8 個隱藏彩蛋。
+                            </div>
+                            <div class="cmd-links">
+                                <a href="https://yuzusoft-guide.onrender.com/" target="_blank" rel="noopener">网站 →</a>
+                                <a href="https://github.com/TigerFong/Yuzusoft_Guide" target="_blank" rel="noopener">源码 →</a>
+                            </div>
+                        </div>
+
+                        <div class="cmd-line">&nbsp;</div>
+
+                        <div class="cmd-line">
+                            <span class="cmd-path">C:\Users&gt;</span><span class="cmd-input">type projects\desktop-pet\info.txt</span>
+                        </div>
+                        <div class="cmd-line">&nbsp;</div>
+
+                        <div class="cmd-item">
+                            <div class="cmd-item-head">
+                                <span class="cmd-date">2026/09</span>
+                                <span class="cmd-name">desktop-pet</span>
+                            </div>
+                            <div class="cmd-desc">
+                                基于 WPF + .NET 10 的 AI 桌面宠物，整合智谱 GLM 大模型，
+                                能对话、执行系统指令、操作浏览器、语音输入，并带有 HMAC 防篡改的好感度系统。
+                            </div>
+                            <div class="cmd-links">
+                                <a href="https://github.com/TigerFong/Desktop-pet" target="_blank" rel="noopener">源码 →</a>
+                            </div>
+                        </div>
+
+                        <div class="cmd-line">&nbsp;</div>
+
+                        <div class="cmd-line">
+                            <span class="cmd-path">C:\Users&gt;</span><span class="cmd-cursor"></span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==================== 联系我 ==================== -->
+            <section id="contact" class="section contact reveal">
+                <div class="sec-head">
+                    <h2>
+                        <svg class="pixel-icon" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+                            <rect x="1" y="4" width="14" height="9"/>
+                            <rect x="3" y="6" width="2" height="2" fill="var(--bg)"/>
+                            <rect x="11" y="6" width="2" height="2" fill="var(--bg)"/>
+                            <rect x="3" y="10" width="10" height="1" fill="var(--bg)"/>
+                        </svg>
+                        联系我
+                    </h2>
+                    <span class="en">Get in Touch</span>
+                </div>
+
+                <p class="contact-lead">
+                    如果你对我的作品感兴趣，或者有有趣的想法，欢迎随时来信交流。
+                </p>
+
+                <div class="contact-grid">
+
+                    <!-- GitHub —— 主卡，整行 -->
+                    <a class="contact-card contact-card-primary"
+                    href="https://github.com/TigerFong" target="_blank" rel="noopener">
+                        <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
+                        </svg>
+                        <div class="contact-card-head">
+                            <div class="contact-card-name">GitHub</div>
+                            <div class="contact-card-value">github.com/TigerFong</div>
+                        </div>
+                        <div class="contact-card-arrow">→</div>
+                    </a>
+
+                    <!-- Email -->
+                    <div class="contact-card">
+                        <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="5" width="18" height="14" rx="2"/>
+                            <path d="M3 7l9 6 9-6"/>
+                        </svg>
+                        <div class="contact-card-head">
+                            <div class="contact-card-name">Email</div>
+                            <div class="contact-card-value" id="emailText">tigerfong49@gmail.com</div>
+                        </div>
+                        <button class="mail-copy" id="copyBtn" type="button">复制</button>
+                    </div>
+
+                    <!-- Bilibili -->
+                    <a class="contact-card" href="https://b23.tv/E1b5htR" target="_blank" rel="noopener">
+                        <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3.5" y="7.5" width="17" height="12" rx="2.5"/>
+                            <path d="M8 3.5l3 3.5M16 3.5l-3 3.5"/>
+                        </svg>
+                        <div class="contact-card-head">
+                            <div class="contact-card-name">Bilibili</div>
+                            <div class="contact-card-value">b23.tv/E1b5htR</div>
+                        </div>
+                        <div class="contact-card-arrow">→</div>
+                    </a>
+
+                </div>
+            </section>
+
+        </main>
+
+        <!-- ==================== 页脚 ==================== -->
+        <footer class="site-footer">
+            <span>© 2026 tigerfong.github.io</span>
+        </footer>
+
+    </div>
+
+    <button class="back-top" id="backTop" aria-label="回到顶部">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+             stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 19V5M5 12l7-7 7 7"/>
+        </svg>
+    </button>
+
+</body>
+</html>
