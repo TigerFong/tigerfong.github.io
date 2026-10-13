@@ -1,9 +1,9 @@
-# TigerFong · 个人主页
+# TigerFong · 個人主頁
 
-> 一个用代码、终端、游戏三种界面讲自己的个人主页。
+> 一個用程式碼、終端機、遊戲三種介面講自己的個人主頁。
 
-[![网站](https://img.shields.io/badge/网站-在线访问-2c5f8a?style=flat-square)](https://tigerfong.github.io)
-![状态](https://img.shields.io/badge/status-active-success?style=flat-square)
+[![網站](https://img.shields.io/badge/網站-線上訪問-2c5f8a?style=flat-square)](https://tigerfong.github.io)
+![狀態](https://img.shields.io/badge/status-active-success?style=flat-square)
 ![License](https://img.shields.io/badge/license-MIT-blue?style=flat-square)
 ![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=flat-square&logo=html5&logoColor=white)
 ![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=flat-square&logo=css3&logoColor=white)
@@ -11,93 +11,93 @@
 
 ---
 
-## 简介
+## 簡介
 
-个人主页把三块内容做成三种界面：
+個人主頁把三塊內容做成三種介面：
 
-| 区块 | 界面隐喻 | 内容 |
+| 區塊 | 介面隱喻 | 內容 |
 |------|----------|------|
-| 关于我 | VS Code 编辑器 | 一段 Python 代码，`print(Me())` 输出自我介绍 |
-| 作品集 | Windows CMD | `dir` + `type` 展示两个项目 |
-| 联系我 | RPG 存档画面 | 头像、等级、技能条、联系方式 |
+| 關於我 | VS Code 編輯器 | 一段 Python 程式碼，`print(Me())` 輸出自我介紹 |
+| 作品集 | Windows CMD | `dir` + `type` 展示兩個專案 |
+| 聯絡我 | RPG 存檔畫面 | 頭像、等級、技能條、聯絡方式 |
 
-三块不只是装饰，都能「操作」——编辑器可以 Run、CMD 可以最小化、RPG 技能条会随滚动填充。
+三塊不只是裝飾，都能「操作」——編輯器可以 Run、CMD 可以最小化、RPG 技能條會隨捲動填充。
 
-🔗 **在线访问**：<https://tigerfong.github.io>
+🔗 **線上訪問**：<https://tigerfong.github.io>
 
 ---
 
 ## 功能
 
-### 交互
+### 互動
 
-- **编辑器窗口**：最小化 / 最大化 / 关闭 / Run（模拟 Python 输出）
-- **CMD 窗口**：最小化 / 最大化 / 关闭
-- **RPG 技能条**：进入视口时滚动填充
-- **主题切换**：深色 / 浅色，默认深色，选择存在 localStorage
-- **滑出菜单**：右侧抽屉，含导航和链接
-- **复制邮箱**：点击后变成「已复制」，并冒出粒子
+- **編輯器視窗**：最小化 / 最大化 / 關閉 / Run（模擬 Python 輸出）
+- **CMD 視窗**：最小化 / 最大化 / 關閉
+- **RPG 技能條**：進入視口時捲動填充
+- **主題切換**：深色 / 淺色，預設深色，選擇存在 localStorage
+- **滑出選單**：右側抽屜，含導覽和連結
+- **複製信箱**：點擊後變成「已複製」，並冒出粒子
 
-### 动效
+### 動效
 
-- **首屏入场**：四个元素逐个淡入上移
-- **代码行交错**：编辑器 21 行代码从上往下逐行出现
-- **CMD 打字**：三条命令逐字敲出
-- **滚动淡入**：区块进入视口时淡入
-- **鼠标光晕**：跟随鼠标移动的淡蓝光
-- **滚动进度条**：顶部 2px 进度指示
-- **箭头滑动**：链接悬停时 `→` 右移
-- **头像呼吸**：RPG 头像轻微上下浮动
-- **CRT 扫描线**：RPG 卡片覆盖极细扫描线
+- **首屏入場**：四個元素逐個淡入上移
+- **程式碼行交錯**：編輯器 21 行程式碼從上往下逐行出現
+- **CMD 打字**：三條指令逐字敲出
+- **捲動淡入**：區塊進入視口時淡入
+- **滑鼠光暈**：跟隨滑鼠移動的淡藍光
+- **捲動進度條**：頂部 2px 進度指示
+- **箭頭滑動**：連結懸停時 `→` 右移
+- **頭像呼吸**：RPG 頭像輕微上下浮動
+- **CRT 掃描線**：RPG 卡片覆蓋極細掃描線
 
-### 键盘快捷键
+### 鍵盤快捷鍵
 
-| 键 | 功能 |
+| 鍵 | 功能 |
 |----|------|
-| `T` | 切换主题 |
-| `M` | 开关菜单 |
-| `G` | 回到顶部 |
-| `Esc` | 关闭菜单 |
+| `T` | 切換主題 |
+| `M` | 開關選單 |
+| `G` | 回到頂部 |
+| `Esc` | 關閉選單 |
 
 ---
 
-## 技术栈
+## 技術棧
 
-- **原生 HTML / CSS / JavaScript**——无框架、无构建工具、无依赖
-- **字体**：系统字体栈 + 等宽字体
-- **主题**：CSS 变量驱动，`data-theme` 属性切换
-- **动画**：CSS `@keyframes` + Web Animations API + IntersectionObserver
-- **图标**：全部内联 SVG，无图标库
+- **原生 HTML / CSS / JavaScript**——無框架、無建置工具、無依賴
+- **字型**：系統字型堆疊 + 等寬字型
+- **主題**：CSS 變數驅動，`data-theme` 屬性切換
+- **動畫**：CSS `@keyframes` + Web Animations API + IntersectionObserver
+- **圖示**：全部內嵌 SVG，無圖示庫
 
-整个项目**零外部依赖**，无 npm、无打包、无 CDN 请求（除了 GitHub 头像）。
+整個專案**零外部依賴**，無 npm、無打包、無 CDN 請求（除了 GitHub 頭像）。
 
 ---
 
-## 项目结构
+## 專案結構
 
 ```
 tigerfong.github.io/
-├── index.html      # 页面结构
-├── style.css       # 全部样式（约 1600 行）
-├── script.js       # 交互逻辑（约 700 行）
+├── index.html      # 頁面結構
+├── style.css       # 全部樣式（約 1600 行）
+├── script.js       # 互動邏輯（約 700 行）
 ├── README.md
 ├── LICENSE
 └── images/
-    ├── bg-light.png   # 首屏浅色背景
+    ├── bg-light.png   # 首屏淺色背景
     └── bg-dark.png    # 首屏深色背景
 ```
 
 ---
 
-## 本地运行
+## 本地執行
 
-纯静态页面，不需要服务器。
+純靜態頁面，不需要伺服器。
 
-### 方式 1：直接打开
+### 方式 1：直接開啟
 
-双击 `index.html` 即可。
+雙擊 `index.html` 即可。
 
-### 方式 2：本地服务器（推荐，避免背景图加载问题）
+### 方式 2：本地伺服器（推薦，避免背景圖載入問題）
 
 ```bash
 # Python 3
@@ -110,147 +110,147 @@ npx serve
 php -S localhost:8000
 ```
 
-然后访问 <http://localhost:8000>。
+然後訪問 <http://localhost:8000>。
 
 ---
 
-## 自定义
+## 自訂
 
-### 改主题色
+### 改主題色
 
-`style.css` 顶部：
+`style.css` 頂部：
 
 ```css
 :root {
-  --accent: #2c5f8a;       /* 浅色模式强调色 */
+  --accent: #2c5f8a;       /* 淺色模式強調色 */
   --accent-dark: #1e4468;
   --accent-soft: #e8eff6;
 }
 :root[data-theme="dark"] {
-  --accent: #6ba3d4;       /* 深色模式强调色 */
+  --accent: #6ba3d4;       /* 深色模式強調色 */
   --accent-dark: #4a86b8;
   --accent-soft: #1e2a38;
 }
 ```
 
-改这几个色值，全站跟着变：按钮、下划线、链接、技能条、像素图标、菜单高亮。
+改這幾個色值，全站跟著變：按鈕、下劃線、連結、技能條、像素圖示、選單高亮。
 
-### 改内容
+### 改內容
 
-| 想改什么 | 改哪里 |
+| 想改什麼 | 改哪裡 |
 |----------|--------|
 | 首屏名字、定位小字 | `index.html` 的 `.hero` |
-| 自我介绍（Python 代码） | `index.html` 的 `.editor-body` |
-| Run 后的输出 | `script.js` 里 `outputLines` 数组 |
-| 作品集项目 | `index.html` 的 `.cmd-item` |
-| 联系方式 | `index.html` 的 `.rpg-contact` |
-| 技能条数值 | `index.html` 的 `data-val`，或状态词 |
-| 技能条填充 | `index.html` 里 `<i data-val="72">` 的数值 |
-| 等级 | `index.html` 的 `.rpg-level`（Lv. 12） |
+| 自我介紹（Python 程式碼） | `index.html` 的 `.editor-body` |
+| Run 後的輸出 | `script.js` 裡 `outputLines` 陣列 |
+| 作品集專案 | `index.html` 的 `.cmd-item` |
+| 聯絡方式 | `index.html` 的 `.rpg-contact` |
+| 技能條數值 | `index.html` 的 `data-val`，或狀態詞 |
+| 技能條填充 | `index.html` 裡 `<i data-val="72">` 的數值 |
+| 等級 | `index.html` 的 `.rpg-level`（Lv. 12） |
 
-### 换头像
+### 換頭像
 
-`index.html` 搜 `github.com/TigerFong.png`，改成你的 GitHub 用户名：
+`index.html` 搜 `github.com/TigerFong.png`，改成你的 GitHub 使用者名稱：
 
 ```html
-<img src="https://github.com/你的用户名.png?size=200" alt="头像">
+<img src="https://github.com/你的使用者名稱.png?size=200" alt="頭像">
 ```
 
-### 换 favicon
+### 換 favicon
 
-`index.html` 的 `<head>` 里搜 `rel="icon"`：
+`index.html` 的 `<head>` 裡搜 `rel="icon"`：
 
 ```html
 <link rel="icon" href="data:image/svg+xml,<svg ...><rect fill='%232c5f8a'/><text ...>T</text></svg>">
 ```
 
-- `fill='%232c5f8a'` → 背景色（`%23` 是 `#` 的转义）
-- `>T<` → 显示的字
-- `rx='20'` → 圆角半径（0-50，50 是圆形）
+- `fill='%232c5f8a'` → 背景色（`%23` 是 `#` 的轉義）
+- `>T<` → 顯示的字
+- `rx='20'` → 圓角半徑（0-50，50 是圓形）
 
-### 换背景图
+### 換背景圖
 
-替换 `images/bg-light.png`（浅色模式）和 `images/bg-dark.png`（深色模式）。
+替換 `images/bg-light.png`（淺色模式）和 `images/bg-dark.png`（深色模式）。
 
-**建议尺寸**：1920×1080 以上，横构图。
+**建議尺寸**：1920×1080 以上，橫構圖。
 
-**没图也行**——浏览器会忽略加载失败的背景图，只显示纯色。
+**沒圖也行**——瀏覽器會忽略載入失敗的背景圖，只顯示純色。
 
 ---
 
 ## 部署
 
-### GitHub Pages（推荐）
+### GitHub Pages（推薦）
 
-1. 创建仓库，名称为 `你的用户名.github.io`
-2. 把所有文件推到 `main` 分支根目录
-3. 等 1-2 分钟，访问 `https://你的用户名.github.io`
+1. 建立倉庫，名稱為 `你的使用者名稱.github.io`
+2. 把所有檔案推到 `main` 分支根目錄
+3. 等 1-2 分鐘，訪問 `https://你的使用者名稱.github.io`
 
 ```bash
 git init
 git add .
 git commit -m "init"
 git branch -M main
-git remote add origin https://github.com/你的用户名/你的用户名.github.io.git
+git remote add origin https://github.com/你的使用者名稱/你的使用者名稱.github.io.git
 git push -u origin main
 ```
 
 ### 其他平台
 
-- **Vercel**：导入 GitHub 仓库，零配置
-- **Netlify**：拖拽整个文件夹到网页即可
-- **Cloudflare Pages**：连接 GitHub 仓库
+- **Vercel**：匯入 GitHub 倉庫，零配置
+- **Netlify**：拖曳整個資料夾到網頁即可
+- **Cloudflare Pages**：連接 GitHub 倉庫
 
-全部支持纯静态站点，无需任何构建配置。
+全部支援純靜態站點，無需任何建置配置。
 
 ---
 
-## 浏览器支持
+## 瀏覽器支援
 
-| 浏览器 | 支持 |
+| 瀏覽器 | 支援 |
 |--------|------|
-| Chrome / Edge | ✅ 完整支持 |
-| Safari | ✅ 完整支持 |
-| Firefox | ✅ 完整支持 |
-| 移动端 Safari / Chrome | ✅ 响应式适配 |
-| IE 11 | ❌ 不支持 |
+| Chrome / Edge | ✅ 完整支援 |
+| Safari | ✅ 完整支援 |
+| Firefox | ✅ 完整支援 |
+| 行動端 Safari / Chrome | ✅ 響應式適配 |
+| IE 11 | ❌ 不支援 |
 
-使用的现代特性：CSS 变量、IntersectionObserver、Web Animations API、`backdrop-filter`。
+使用的現代特性：CSS 變數、IntersectionObserver、Web Animations API、`backdrop-filter`。
 
-所有动效在 `prefers-reduced-motion: reduce` 下自动禁用。
+所有動效在 `prefers-reduced-motion: reduce` 下自動停用。
 
 ---
 
-## 设计说明
+## 設計說明
 
-### 为什么用三种界面？
+### 為什麼用三種介面？
 
-个人主页最容易做得千篇一律——一段自我介绍、几张卡片、底部联系。这个项目想让访客**记住**，所以把内容装进三个真实的界面里：
+個人主頁最容易做得千篇一律——一段自我介紹、幾張卡片、底部聯絡。這個專案想讓訪客**記住**，所以把內容裝進三個真實的介面裡：
 
-- **编辑器**对应「写代码」
-- **CMD** 对应「做项目」
-- **RPG 画面**对应「做游戏」
+- **編輯器**對應「寫程式」
+- **CMD** 對應「做專案」
+- **RPG 畫面**對應「做遊戲」
 
-三块界面串起来，就是一句不说的自我介绍：**这个人写代码、做东西、还玩游戏**。
+三塊介面串起來，就是一句不說的自我介紹：**這個人寫程式、做東西、還玩遊戲**。
 
-### 关于动画
+### 關於動畫
 
-所有动画都遵循一个原则：**不为了动而动**。
+所有動畫都遵循一個原則：**不為了動而動**。
 
-- 首屏入场：建立阅读顺序
-- 代码行交错：模拟「代码被写出来」
-- CMD 打字：模拟「命令被执行」
-- 技能条填充：模拟「角色属性被加载」
+- 首屏入場：建立閱讀順序
+- 程式碼行交錯：模擬「程式碼被寫出來」
+- CMD 打字：模擬「指令被執行」
+- 技能條填充：模擬「角色屬性被載入」
 
-每个动画都在讲一件事，不是装饰。
+每個動畫都在講一件事，不是裝飾。
 
 ---
 
 ## License
 
-本项目采用 [MIT License](LICENSE) 授权。
+本專案採用 [MIT License](LICENSE) 授權。
 
-可自由参考代码，但请替换成你自己的个人信息（名字、邮箱、GitHub 用户名、项目内容等）。
+可自由參考程式碼，但請替換成你自己的個人資訊（名字、信箱、GitHub 使用者名稱、專案內容等）。
 
 ---
 
