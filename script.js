@@ -21,13 +21,6 @@ function toggleTheme() {
     var next = root.dataset.theme === 'dark' ? 'light' : 'dark';
     root.dataset.theme = next;
     try { localStorage.setItem('theme', next); } catch (e) {}
-    updateThemeButton();
-}
-
-function updateThemeButton() {
-    var btn = document.getElementById('theme-toggle');
-    if (!btn) return;
-    btn.textContent = document.documentElement.dataset.theme === 'dark' ? '☀' : '☾';
 }
 
 /* ============================================================
@@ -175,8 +168,6 @@ function copyEmail() {
    ============================================================ */
 document.addEventListener('DOMContentLoaded', function () {
 
-    // 主题切换按钮
-    updateThemeButton();
     document.getElementById('theme-toggle')?.addEventListener('click', toggleTheme);
     // 回到顶部
     window.addEventListener('scroll', updateBackTopBtn, { passive: true });
@@ -248,13 +239,6 @@ document.addEventListener('DOMContentLoaded', function () {
             skills.querySelectorAll('.rpg-skill-bar i[data-val]').forEach(function (bar) {
                 bar.style.setProperty('--fill', bar.dataset.val + '%');
             });
-
-            skills.querySelectorAll('.rpg-skill-num[data-val]').forEach(function (num, i) {
-                var target = parseInt(num.dataset.val, 10) || 0;
-                setTimeout(function () {
-                    countUp(num, target, 900);
-                }, i * 100);
-            });
         }
 
         // 尊重「减少动效」
@@ -284,6 +268,243 @@ document.addEventListener('DOMContentLoaded', function () {
         }, { threshold: 0.4 });
 
         io.observe(skills);
+    })();
+
+        /* 滚动进度条 */
+    (function () {
+        var bar = document.getElementById('scrollProgress');
+        if (!bar) return;
+
+        function update() {
+            var max = document.documentElement.scrollHeight - window.innerHeight;
+            var pct = max > 0 ? (window.scrollY / max) * 100 : 0;
+            bar.style.width = pct + '%';
+        }
+
+        window.addEventListener('scroll', update, { passive: true });
+        window.addEventListener('resize', update);
+        update();
+    })();
+
+    /* 鼠标跟随光晕 */
+    (function () {
+        var glow = document.getElementById('cursorGlow');
+        if (!glow) return;
+
+        // 触摸设备跳过
+        if (window.matchMedia('(hover: none)').matches) return;
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+        var mouseX = 0, mouseY = 0;
+        var glowX = 0, glowY = 0;
+        var rafId = null;
+
+        function loop() {
+            // 缓动跟随：光晕比鼠标慢一点
+            glowX += (mouseX - glowX) * 0.08;
+            glowY += (mouseY - glowY) * 0.08;
+            glow.style.transform = 'translate(' + glowX + 'px, ' + glowY + 'px)';
+            rafId = requestAnimationFrame(loop);
+        }
+
+        document.addEventListener('mousemove', function (e) {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            if (!glow.classList.contains('active')) {
+                glow.classList.add('active');
+                // 首次出现时，起点定在鼠标位置
+                glowX = mouseX;
+                glowY = mouseY;
+                if (!rafId) loop();
+            }
+        });
+
+        document.addEventListener('mouseleave', function () {
+            glow.classList.remove('active');
+        });
+    })();
+
+        /* 编辑器代码行交错入场 */
+    (function () {
+        var editor = document.getElementById('editor');
+        if (!editor) return;
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+        var lines = editor.querySelectorAll('.editor-line');
+        lines.forEach(function (line, i) {
+            line.style.transitionDelay = (i * 25) + 'ms';
+        });
+
+        if (!('IntersectionObserver' in window)) {
+            editor.classList.add('in-view');
+            return;
+        }
+
+        var io = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+                if (entry.isIntersecting) {
+                    editor.classList.add('in-view');
+                    io.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.2 });
+
+        io.observe(editor);
+    })();
+
+        /* CMD 命令逐字打字 */
+    (function () {
+        var cmd = document.getElementById('cmd');
+        if (!cmd) return;
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            cmd.querySelectorAll('.cmd-input[data-type]').forEach(function (el) {
+                el.textContent = el.dataset.type;
+            });
+            cmd.querySelectorAll('.cmd-type-cursor').forEach(function (c) { c.style.display = 'none'; });
+            return;
+        }
+
+        var inputs = cmd.querySelectorAll('.cmd-input[data-type]');
+        if (!inputs.length) return;
+
+        function typeOne(el, done) {
+            var text = el.dataset.type;
+            var i = 0;
+            var timer = setInterval(function () {
+                if (i >= text.length) {
+                    clearInterval(timer);
+                    el.classList.add('typed');
+                    if (done) done();
+                    return;
+                }
+                el.textContent += text[i];
+                i++;
+            }, 45);
+        }
+
+        function run() {
+            var idx = 0;
+            function next() {
+                if (idx >= inputs.length) return;
+                typeOne(inputs[idx], function () {
+                    idx++;
+                    setTimeout(next, 260);
+                });
+            }
+            next();
+        }
+
+        if (!('IntersectionObserver' in window)) {
+            inputs.forEach(function (el) { el.textContent = el.dataset.type; el.classList.add('typed'); });
+            cmd.querySelectorAll('.cmd-type-cursor').forEach(function (c) { c.style.display = 'none'; });
+            return;
+        }
+
+        var io = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+                if (entry.isIntersecting) {
+                    run();
+                    io.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.3 });
+
+        io.observe(cmd);
+    })();
+
+        /* 导航高亮：滚动时高亮当前区块 */
+    (function () {
+        var items = document.querySelectorAll('#menuPanel .menu-item[href^="#"]');
+        if (!items.length) return;
+
+        var sections = [];
+        items.forEach(function (a) {
+            var id = a.getAttribute('href').slice(1);
+            var sec = document.getElementById(id);
+            if (sec) sections.push({ el: sec, link: a });
+        });
+
+        function update() {
+            var line = window.scrollY + window.innerHeight * 0.3;
+            var current = null;
+            sections.forEach(function (s) {
+                if (s.el.offsetTop <= line) current = s;
+            });
+            items.forEach(function (a) { a.classList.remove('active'); });
+            if (current) current.link.classList.add('active');
+        }
+
+        window.addEventListener('scroll', update, { passive: true });
+        window.addEventListener('resize', update);
+        update();
+    })();
+
+        /* 复制成功粒子 */
+    (function () {
+        var btn = document.getElementById('copyBtn');
+        if (!btn) return;
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+        btn.addEventListener('click', function () {
+            var rect = btn.getBoundingClientRect();
+            var cx = rect.left + rect.width / 2;
+            var cy = rect.top + rect.height / 2;
+
+            var count = 10;
+            for (var i = 0; i < count; i++) {
+                (function (i) {
+                    var p = document.createElement('div');
+                    p.className = 'copy-particle';
+                    p.style.left = cx + 'px';
+                    p.style.top = cy + 'px';
+                    document.body.appendChild(p);
+
+                    var angle = (Math.PI * 2 * i) / count + (Math.random() - 0.5) * 0.5;
+                    var dist = 36 + Math.random() * 24;
+                    var dx = Math.cos(angle) * dist;
+                    var dy = Math.sin(angle) * dist;
+
+                    p.animate([
+                        { transform: 'translate(-50%, -50%) scale(1)', opacity: 1 },
+                        { transform: 'translate(calc(-50% + ' + dx + 'px), calc(-50% + ' + dy + 'px)) scale(0)', opacity: 0 }
+                    ], {
+                        duration: 700,
+                        easing: 'cubic-bezier(.22, 1, .36, 1)'
+                    }).onfinish = function () {
+                        p.remove();
+                    };
+                })(i);
+            }
+        });
+    })();
+
+        /* 键盘快捷键：T 切主题 / M 开关菜单 / G 回顶 */
+    (function () {
+        document.addEventListener('keydown', function (e) {
+            // 在输入框里不触发
+            var tag = (e.target.tagName || '').toLowerCase();
+            if (tag === 'input' || tag === 'textarea' || e.target.isContentEditable) return;
+            // 有修饰键不触发
+            if (e.ctrlKey || e.metaKey || e.altKey) return;
+
+            var key = e.key.toLowerCase();
+
+            if (key === 't') {
+                e.preventDefault();
+                toggleTheme();
+            } else if (key === 'm') {
+                e.preventDefault();
+                var panel = document.getElementById('menuPanel');
+                if (panel && panel.classList.contains('open')) {
+                    closeMenu();
+                } else {
+                    openMenu();
+                }
+            } else if (key === 'g') {
+                e.preventDefault();
+                scrollToTop();
+            }
+        });
     })();
 
 });

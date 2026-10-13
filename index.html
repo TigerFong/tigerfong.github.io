@@ -7,12 +7,29 @@
     <meta name="description" content="前端工程师 / 把复杂的问题，做成简单的产品。">  
     <meta name="theme-color" content="#14171c" media="(prefers-color-scheme: dark)">
     <meta name="theme-color" content="#f7f8fa" media="(prefers-color-scheme: light)">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%232c5f8a'/><text x='50' y='68' font-size='58' font-weight='bold' fill='white' text-anchor='middle' font-family='system-ui'>T</text></svg>">
     <link rel="stylesheet" href="style.css">
     <script src="script.js"></script>
 </head>
 <body>
 
-    <button class="theme-toggle" id="theme-toggle" aria-label="切换深色 / 浅色主题">☾</button>
+    <!-- 滚动进度条 -->
+    <div class="scroll-progress" id="scrollProgress"></div>
+
+    <!-- 鼠标光晕 -->
+    <div class="cursor-glow" id="cursorGlow"></div>
+
+    <button class="theme-toggle" id="theme-toggle" aria-label="切换深色 / 浅色主题">
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="4"/>
+            <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+        </svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+    </button>
 
     <button class="menu-btn" id="menuBtn" aria-label="打开菜单" aria-expanded="false">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -54,9 +71,18 @@
     <div class="wrap">
 
         <!-- ==================== 顶部标语 ==================== -->
-        <header class="hero reveal">
+        <header class="hero">
             <p class="eyebrow">Hello, I'm</p>
-            <h1>TigerFong</h1>
+            <h1>TigerFong <span class="status-dot"></span></h1>
+            <p class="tagline">写网页 · 做游戏</p>
+
+            <a class="hero-scroll" href="#about" aria-label="向下滚动">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 5v14M5 12l7 7 7-7"/>
+                </svg>
+                <span>向下滚动</span>
+            </a>
         </header>
 
         <main>
@@ -64,6 +90,7 @@
             <!-- ==================== 关于我 ==================== -->
             <section id="about" class="section about reveal">
                 <div class="sec-head">
+                    <span class="sec-num">01</span>
                     <h2>
                         <svg class="pixel-icon" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
                             <rect x="5" y="1" width="6" height="5"/>
@@ -95,7 +122,7 @@
                         </div>
                         <div class="editor-line">
                             <span class="editor-num">2</span>
-                            <span class="editor-text">    <span class="str">"""一个正在学着做游戏的学生。"""</span></span>
+                            <span class="editor-text">    <span class="str">"""一个喜欢自己动手做东西的学生。"""</span></span>
                         </div>
                         <div class="editor-line">
                             <span class="editor-num">3</span>
@@ -210,6 +237,7 @@
             <!-- ==================== 作品集 ==================== -->
             <section id="work" class="section reveal">
                 <div class="sec-head">
+                    <span class="sec-num">02</span>
                     <h2>
                         <svg class="pixel-icon" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
                             <rect x="2" y="6" width="12" height="8"/>
@@ -244,14 +272,14 @@
                         <div class="cmd-line">&nbsp;</div>
 
                         <div class="cmd-line">
-                            <span class="cmd-path">C:\Users&gt;</span><span class="cmd-input">dir projects /b /o-d</span>
+                            <span class="cmd-path">C:\Users&gt;</span><span class="cmd-input" data-type="dir projects /b /o-d"></span><span class="cmd-type-cursor"></span>
                         </div>
                         <div class="cmd-line">yuzusoft-guide</div>
                         <div class="cmd-line">desktop-pet</div>
                         <div class="cmd-line">&nbsp;</div>
 
                         <div class="cmd-line">
-                            <span class="cmd-path">C:\Users&gt;</span><span class="cmd-input">type projects\yuzusoft-guide\info.txt</span>
+                            <span class="cmd-path">C:\Users&gt;</span><span class="cmd-input" data-type="type projects\yuzusoft-guide\info.txt"></span><span class="cmd-type-cursor"></span>
                         </div>
                         <div class="cmd-line">&nbsp;</div>
 
@@ -273,7 +301,7 @@
                         <div class="cmd-line">&nbsp;</div>
 
                         <div class="cmd-line">
-                            <span class="cmd-path">C:\Users&gt;</span><span class="cmd-input">type projects\desktop-pet\info.txt</span>
+                            <span class="cmd-path">C:\Users&gt;</span><span class="cmd-input" data-type="type projects\desktop-pet\info.txt"></span><span class="cmd-type-cursor"></span>
                         </div>
                         <div class="cmd-line">&nbsp;</div>
 
@@ -307,6 +335,7 @@
             <!-- ==================== 联系我 ==================== -->
             <section id="contact" class="section contact reveal">
                 <div class="sec-head">
+                    <span class="sec-num">03</span>
                     <h2>
                         <svg class="pixel-icon" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
                             <rect x="1" y="4" width="14" height="9"/>
@@ -331,26 +360,26 @@
                         </div>
                         <div class="rpg-info">
                             <div class="rpg-name">TigerFong</div>
-                            <div class="rpg-class">FULL-STACK ENGINEER</div>
-                            <div class="rpg-level">Lv. 99</div>
+                            <div class="rpg-class">STUDENT DEVELOPER</div>
+                            <div class="rpg-level">Lv. 12</div>
                         </div>
                     </div>
 
                     <div class="rpg-skills">
                         <div class="rpg-skill">
                             <span class="rpg-skill-name">前端</span>
-                            <span class="rpg-skill-bar"><i data-val="92"></i></span>
-                            <span class="rpg-skill-num" data-val="92">0</span>
+                            <span class="rpg-skill-bar"><i data-val="72"></i></span>
+                            <span class="rpg-skill-num">常用</span>
                         </div>
                         <div class="rpg-skill">
                             <span class="rpg-skill-name">后端</span>
-                            <span class="rpg-skill-bar"><i data-val="78"></i></span>
-                            <span class="rpg-skill-num" data-val="78">0</span>
+                            <span class="rpg-skill-bar"><i data-val="42"></i></span>
+                            <span class="rpg-skill-num">在学</span>
                         </div>
                         <div class="rpg-skill">
                             <span class="rpg-skill-name">游戏</span>
-                            <span class="rpg-skill-bar"><i data-val="64"></i></span>
-                            <span class="rpg-skill-num" data-val="64">0</span>
+                            <span class="rpg-skill-bar"><i data-val="55"></i></span>
+                            <span class="rpg-skill-num">在做</span>
                         </div>
                     </div>
 
