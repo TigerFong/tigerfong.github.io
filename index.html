@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="zh-CN" data-theme="light">
+<html lang="zh-CN" data-theme="dar">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>TigerFong · 个人主页</title>
-    <meta name="description" content="前端工程师 / 把复杂的问题，做成简单的产品。">
-    <meta name="theme-color" content="#f7f8fa" media="(prefers-color-scheme: light)">
+    <meta name="description" content="前端工程师 / 把复杂的问题，做成简单的产品。">  
     <meta name="theme-color" content="#14171c" media="(prefers-color-scheme: dark)">
+    <meta name="theme-color" content="#f7f8fa" media="(prefers-color-scheme: light)">
     <link rel="stylesheet" href="style.css">
     <script src="script.js"></script>
 </head>
@@ -47,7 +47,6 @@
         <nav class="menu-group">
             <div class="menu-group-label">連結</div>
             <a class="menu-item" href="https://github.com/TigerFong" target="_blank" rel="noopener">GitHub</a>
-            <a class="menu-item" href="https://b23.tv/E1b5htR" target="_blank" rel="noopener">Bilibili</a>
             <a class="menu-item" href="mailto:tigerfong49@gmail.com">Email</a>
         </nav>
     </aside>
@@ -57,8 +56,7 @@
         <!-- ==================== 顶部标语 ==================== -->
         <header class="hero reveal">
             <p class="eyebrow">Hello, I'm</p>
-            <h1>TigerFong <span class="status-dot"></span></h1>
-            <p class="slogan" id="typewriter"></p>
+            <h1>TigerFong</h1>
         </header>
 
         <main>
@@ -82,7 +80,7 @@
 
                 <div class="editor" id="editor">
                     <div class="editor-bar">
-                        <div class="editor-filename">about.js</div>
+                        <div class="editor-filename">about.py</div>
                         <div class="editor-controls">
                             <button class="ctrl-btn ctrl-min" id="editorMin" aria-label="最小化"></button>
                             <button class="ctrl-btn ctrl-max" id="editorMax" aria-label="最大化"></button>
@@ -93,11 +91,11 @@
                     <div class="editor-body" id="editorBody">
                         <div class="editor-line">
                             <span class="editor-num">1</span>
-                            <span class="editor-text"><span class="kw">const</span> <span class="var">me</span> = {</span>
+                            <span class="editor-text"><span class="decl">class</span> <span class="cls">Me</span>:</span>
                         </div>
                         <div class="editor-line">
                             <span class="editor-num">2</span>
-                            <span class="editor-text">    <span class="prop">intro</span>: <span class="str">'一个总想把手里的想法变成实物的人。'</span>,</span>
+                            <span class="editor-text">    <span class="str">"""一个正在学着做游戏的学生。"""</span></span>
                         </div>
                         <div class="editor-line">
                             <span class="editor-num">3</span>
@@ -105,64 +103,94 @@
                         </div>
                         <div class="editor-line">
                             <span class="editor-num">4</span>
-                            <span class="editor-text">    <span class="prop">doing</span>: [</span>
+                            <span class="editor-text">    <span class="var">name</span>  = <span class="str">"TigerFong"</span></span>
                         </div>
                         <div class="editor-line">
                             <span class="editor-num">5</span>
-                            <span class="editor-text">        <span class="str">'会写前端，也会碰后端'</span>,</span>
+                            <span class="editor-text">    <span class="var">role</span>  = <span class="str">"前端 / 游戏程序"</span></span>
                         </div>
                         <div class="editor-line">
                             <span class="editor-num">6</span>
-                            <span class="editor-text">        <span class="str">'做过网页，也做过桌面程序'</span></span>
+                            <span class="editor-text">    <span class="var">intro</span> = <span class="str">"学生。平时写点网页，也在学着做游戏。"</span></span>
                         </div>
                         <div class="editor-line">
                             <span class="editor-num">7</span>
-                            <span class="editor-text">    ],</span>
+                            <span class="editor-text"></span>
                         </div>
                         <div class="editor-line">
                             <span class="editor-num">8</span>
-                            <span class="editor-text"></span>
+                            <span class="editor-text">    <span class="var">doing</span> = [</span>
                         </div>
                         <div class="editor-line">
                             <span class="editor-num">9</span>
-                            <span class="editor-text">    <span class="prop">habit</span>: <span class="str">'比起把需求照单实现，更习惯先问一句「这事该不该这么做」，'</span> +</span>
+                            <span class="editor-text">        <span class="str">"网页 —— 从设计到前端，自己搭"</span>,</span>
                         </div>
                         <div class="editor-line">
                             <span class="editor-num">10</span>
-                            <span class="editor-text">            <span class="str">'想清楚了再动手，然后一口气把它做出来。'</span>,</span>
+                            <span class="editor-text">        <span class="str">"桌宠 —— WPF + 大模型，能对话"</span>,</span>
                         </div>
                         <div class="editor-line">
                             <span class="editor-num">11</span>
-                            <span class="editor-text"></span>
+                            <span class="editor-text">        <span class="str">"游戏 —— Unity 项目，程序归我"</span>,</span>
                         </div>
                         <div class="editor-line">
                             <span class="editor-num">12</span>
-                            <span class="editor-text">    <span class="prop">pile</span>: [<span class="str">'写过的代码'</span>, <span class="str">'废弃的草稿'</span>, <span class="str">'做到一半的游戏'</span>],</span>
+                            <span class="editor-text">        <span class="str">"后端 —— 碰过一点，还在学"</span>,</span>
                         </div>
                         <div class="editor-line">
                             <span class="editor-num">13</span>
-                            <span class="editor-text">    <span class="comment">// 零散地堆在手边，一直没舍得丢。</span></span>
+                            <span class="editor-text">    ]</span>
                         </div>
                         <div class="editor-line">
                             <span class="editor-num">14</span>
-                            <span class="editor-text">    <span class="comment">// 它们迟早会各自长成该有的样子。</span></span>
-                        </div>
-                        <div class="editor-line">
-                            <span class="editor-num">15</span>
                             <span class="editor-text"></span>
                         </div>
                         <div class="editor-line">
+                            <span class="editor-num">15</span>
+                            <span class="editor-text">        <span class="decl">def</span> <span class="fn">__str__</span>(<span class="var">self</span>):</span>
+                        </div>
+                        <div class="editor-line">
                             <span class="editor-num">16</span>
-                            <span class="editor-text">    <span class="prop">role</span>: <span class="str">'能把想法独立落成产品的全栈型工程师'</span>,</span>
+                            <span class="editor-text">        <span class="var">lines</span> = [<span class="str">f"</span>{<span class="var">self</span>.<span class="var">name</span>} — {<span class="var">self</span>.<span class="var">role</span>}<span class="str">"</span>, <span class="var">self</span>.<span class="var">intro</span>]</span>
                         </div>
                         <div class="editor-line">
                             <span class="editor-num">17</span>
-                            <span class="editor-text">    <span class="prop">focus</span>: [<span class="str">'交互体验'</span>, <span class="str">'工程效率'</span>]</span>
+                            <span class="editor-text">        <span class="var">lines</span> += [<span class="str">f"  · {d}"</span> <span class="kw">for</span> <span class="var">d</span> <span class="kw">in</span> <span class="var">self</span>.<span class="var">doing</span>]</span>
                         </div>
                         <div class="editor-line">
                             <span class="editor-num">18</span>
-                            <span class="editor-text">};</span>
+                            <span class="editor-text">        <span class="kw">return</span> <span class="str">"\n"</span>.<span class="fn">join</span>(<span class="var">lines</span>)</span>
                         </div>
+                        <div class="editor-line">
+                            <span class="editor-num">19</span>
+                            <span class="editor-text"></span>
+                        </div>
+                        <div class="editor-line">
+                            <span class="editor-num">20</span>
+                            <span class="editor-text"></span>
+                        </div>
+                        <div class="editor-line current">
+                            <span class="editor-num">21</span>
+                            <span class="editor-text"><span class="fn">print</span>(<span class="cls">Me</span>())</span>
+                        </div>
+                    </div>
+
+                    <div class="editor-statusbar">
+                        <button class="run-btn" id="editorRun" type="button">
+                            <svg viewBox="0 0 12 12" fill="currentColor" aria-hidden="true">
+                                <path d="M2 1l9 5-9 5V1z"/>
+                            </svg>
+                            <span class="run-label">Run</span>
+                        </button>
+                        <span class="status-info">about.py · Python 3</span>
+                    </div>
+
+                    <div class="editor-output" id="editorOutput" hidden>
+                        <div class="output-header">
+                            <span>输出</span>
+                            <button class="output-close" id="outputClose" type="button" aria-label="关闭输出">✕</button>
+                        </div>
+                        <pre class="output-body" id="outputBody"></pre>
                     </div>
                 </div>
 
@@ -171,11 +199,11 @@
                 </div>
 
                 <ul class="chips">
-                    <li>前端工程</li>
-                    <li>独立开发</li>
-                    <li>AI 集成</li>
-                    <li>游戏开发</li>
-                    <li>全栈</li>
+                    <li data-tip="界面和交互，都归我管">前端工程</li>
+                    <li data-tip="自己给自己当产品经理">独立开发</li>
+                    <li data-tip="GLM / Whisper / 工具调用">AI 集成</li>
+                    <li data-tip="写代码之余，造个世界">游戏开发</li>
+                    <li data-tip="哪里需要，就往哪里补">全栈</li>
                 </ul>
             </section>
 
@@ -194,7 +222,7 @@
                     <span class="en">Selected Works</span>
                 </div>
 
-                <div class="cmd">
+                <div class="cmd" id="cmd">
                     <div class="cmd-bar">
                         <div class="cmd-tab">
                             <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
@@ -204,9 +232,9 @@
                             <button class="cmd-tab-close" aria-hidden="true">✕</button>
                         </div>
                         <div class="cmd-controls">
-                            <button class="cmd-ctrl cmd-min" aria-label="最小化"></button>
-                            <button class="cmd-ctrl cmd-max" aria-label="最大化"></button>
-                            <button class="cmd-ctrl cmd-close" aria-label="关闭"></button>
+                            <button class="cmd-ctrl cmd-min" id="cmdMin" aria-label="最小化"></button>
+                            <button class="cmd-ctrl cmd-max" id="cmdMax" aria-label="最大化"></button>
+                            <button class="cmd-ctrl cmd-close" id="cmdClose" aria-label="关闭"></button>
                         </div>
                     </div>
 
@@ -270,6 +298,10 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="cmd-restore" id="cmdRestore" hidden>
+                    <button type="button" id="cmdRestoreBtn">重新打开命令提示字元</button>
+                </div>
             </section>
 
             <!-- ==================== 联系我 ==================== -->
@@ -287,54 +319,65 @@
                     <span class="en">Get in Touch</span>
                 </div>
 
-                <p class="contact-lead">
-                    如果你对我的作品感兴趣，或者有有趣的想法，欢迎随时来信交流。
-                </p>
-
-                <div class="contact-grid">
-
-                    <!-- GitHub —— 主卡，整行 -->
-                    <a class="contact-card contact-card-primary"
-                    href="https://github.com/TigerFong" target="_blank" rel="noopener">
-                        <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
-                        </svg>
-                        <div class="contact-card-head">
-                            <div class="contact-card-name">GitHub</div>
-                            <div class="contact-card-value">github.com/TigerFong</div>
-                        </div>
-                        <div class="contact-card-arrow">→</div>
-                    </a>
-
-                    <!-- Email -->
-                    <div class="contact-card">
-                        <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                            <rect x="3" y="5" width="18" height="14" rx="2"/>
-                            <path d="M3 7l9 6 9-6"/>
-                        </svg>
-                        <div class="contact-card-head">
-                            <div class="contact-card-name">Email</div>
-                            <div class="contact-card-value" id="emailText">tigerfong49@gmail.com</div>
-                        </div>
-                        <button class="mail-copy" id="copyBtn" type="button">复制</button>
+                <div class="rpg">
+                    <div class="rpg-bar">
+                        <span class="rpg-bar-tag">PLAYER 01</span>
+                        <span class="rpg-bar-status">● ONLINE</span>
                     </div>
 
-                    <!-- Bilibili -->
-                    <a class="contact-card" href="https://b23.tv/E1b5htR" target="_blank" rel="noopener">
-                        <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-                            <rect x="3.5" y="7.5" width="17" height="12" rx="2.5"/>
-                            <path d="M8 3.5l3 3.5M16 3.5l-3 3.5"/>
-                        </svg>
-                        <div class="contact-card-head">
-                            <div class="contact-card-name">Bilibili</div>
-                            <div class="contact-card-value">b23.tv/E1b5htR</div>
+                    <div class="rpg-head">
+                        <div class="rpg-avatar" id="rpgAvatar">
+                            <img src="https://github.com/TigerFong.png?size=200" alt="TigerFong">
                         </div>
-                        <div class="contact-card-arrow">→</div>
-                    </a>
+                        <div class="rpg-info">
+                            <div class="rpg-name">TigerFong</div>
+                            <div class="rpg-class">FULL-STACK ENGINEER</div>
+                            <div class="rpg-level">Lv. 99</div>
+                        </div>
+                    </div>
 
+                   <div class="rpg-skills">
+                        <div class="rpg-skill">
+                            <span class="rpg-skill-name">前端</span>
+                            <span class="rpg-skill-bar"><i data-val="92"></i></span>
+                            <span class="rpg-skill-num" data-val="92">0</span>
+                        </div>
+                        <div class="rpg-skill">
+                            <span class="rpg-skill-name">后端</span>
+                            <span class="rpg-skill-bar"><i data-val="78"></i></span>
+                            <span class="rpg-skill-num" data-val="78">0</span>
+                        </div>
+                        <div class="rpg-skill">
+                            <span class="rpg-skill-name">游戏</span>
+                            <span class="rpg-skill-bar"><i data-val="64"></i></span>
+                            <span class="rpg-skill-num" data-val="64">0</span>
+                        </div>
+                    </div>
+
+                    <div class="rpg-contacts">
+                        <a class="rpg-contact" href="https://github.com/TigerFong" target="_blank" rel="noopener">
+                            <span class="rpg-contact-key">▶</span>
+                            <span class="rpg-contact-name">GitHub</span>
+                            <span class="rpg-contact-value">github.com/TigerFong</span>
+                            <span class="rpg-contact-arrow">→</span>
+                        </a>
+                        <div class="rpg-contact">
+                            <span class="rpg-contact-key">▶</span>
+                            <span class="rpg-contact-name">Email</span>
+                            <span class="rpg-contact-value" id="emailText">tigerfong0@gmail.com</span>
+                            <button class="rpg-copy" id="copyBtn" type="button">复制</button>
+                        </div>
+                    </div>
+
+                    <div class="rpg-footer">
+                        如果你对我的作品感兴趣，或者有有趣的想法，欢迎随时来信交流。
+                    </div>
+
+                    <div class="rpg-scanlines"></div>
+                    <div class="rpg-hint">
+                        <span class="rpg-key">[ENTER]</span> 发邮件
+                        <span class="rpg-key">[↑↓]</span> 选择
+                    </div>
                 </div>
             </section>
 

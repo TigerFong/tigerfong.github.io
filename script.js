@@ -5,10 +5,10 @@
     var root = document.documentElement;
     try {
         var saved = localStorage.getItem('theme');
-        var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        root.dataset.theme = saved || (prefersDark ? 'dark' : 'light');
+        // 没有保存过主题时，默认深色
+        root.dataset.theme = saved || 'dark';
     } catch (e) {
-        root.dataset.theme = 'light';
+        root.dataset.theme = 'dark';
     }
     root.classList.add('js');
 })();
@@ -178,21 +178,16 @@ document.addEventListener('DOMContentLoaded', function () {
     // 主题切换按钮
     updateThemeButton();
     document.getElementById('theme-toggle')?.addEventListener('click', toggleTheme);
-
-    // 打字机
-    startTypewriter();
-
     // 回到顶部
     window.addEventListener('scroll', updateBackTopBtn, { passive: true });
     updateBackTopBtn();
     document.getElementById('backTop')?.addEventListener('click', scrollToTop);
-
     // 滚动入场动画
     initReveal();
-
     // 编辑器窗口操作
     initEditor();
-
+    // CMD 窗口操作
+    initCmd();
     // 复制邮箱
     document.getElementById('copyBtn')?.addEventListener('click', copyEmail);
 
@@ -206,6 +201,90 @@ document.addEventListener('DOMContentLoaded', function () {
     document.querySelectorAll('#menuPanel .menu-item').forEach(function (a) {
         a.addEventListener('click', closeMenu);
     });
+
+        // RPG 卡片：鼠标悬停联系方式时，底部提示跟着变
+    (function () {
+        var hint = document.querySelector('.rpg-hint');
+        var rows = document.querySelectorAll('.rpg-contact');
+        if (!hint || !rows.length) return;
+
+        var originalHTML = hint.innerHTML;
+
+        rows.forEach(function (row) {
+            row.addEventListener('mouseenter', function () {
+                var name = row.querySelector('.rpg-contact-name');
+                var label = name ? name.textContent : '';
+                hint.innerHTML = '<span class="rpg-key">[CLICK]</span> 打开 ' + label;
+            });
+            row.addEventListener('mouseleave', function () {
+                hint.innerHTML = originalHTML;
+            });
+        });
+    })();
+
+        /* RPG 技能条：进入视口时填充 + 数字滚动 */
+    (function () {
+        var skills = document.querySelector('.rpg-skills');
+        if (!skills) return;
+
+        function easeOutCubic(t) {
+            return 1 - Math.pow(1 - t, 3);
+        }
+
+        function countUp(el, target, duration) {
+            var startTime = performance.now();
+            function tick(now) {
+                var t = Math.min((now - startTime) / duration, 1);
+                el.textContent = Math.round(easeOutCubic(t) * target);
+                if (t < 1) requestAnimationFrame(tick);
+                else el.textContent = target;
+            }
+            requestAnimationFrame(tick);
+        }
+
+        function run() {
+            skills.classList.add('in');
+
+            skills.querySelectorAll('.rpg-skill-bar i[data-val]').forEach(function (bar) {
+                bar.style.setProperty('--fill', bar.dataset.val + '%');
+            });
+
+            skills.querySelectorAll('.rpg-skill-num[data-val]').forEach(function (num, i) {
+                var target = parseInt(num.dataset.val, 10) || 0;
+                setTimeout(function () {
+                    countUp(num, target, 900);
+                }, i * 100);
+            });
+        }
+
+        // 尊重「减少动效」
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            skills.classList.add('in');
+            skills.querySelectorAll('.rpg-skill-bar i[data-val]').forEach(function (bar) {
+                bar.style.setProperty('--fill', bar.dataset.val + '%');
+            });
+            skills.querySelectorAll('.rpg-skill-num[data-val]').forEach(function (num) {
+                num.textContent = num.dataset.val;
+            });
+            return;
+        }
+
+        if (!('IntersectionObserver' in window)) {
+            run();
+            return;
+        }
+
+        var io = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+                if (entry.isIntersecting) {
+                    run();
+                    io.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.4 });
+
+        io.observe(skills);
+    })();
 
 });
 
@@ -260,12 +339,37 @@ function initEditor() {
 
     // 最小化：折叠正文
     minBtn?.addEventListener('click', function () {
+        // 先退出最大化
+        if (editor.classList.contains('maximized')) {
+            editor.classList.remove('maximized');
+            editor.classList.add('minimized');
+            return;
+        }
         editor.classList.toggle('minimized');
     });
 
-    // 最大化：全屏
+    // 最大化：CSS 全屏
     maxBtn?.addEventListener('click', function () {
+        // 先退出最小化
+        if (editor.classList.contains('minimized')) {
+            editor.classList.remove('minimized');
+        }
         editor.classList.toggle('maximized');
+    });
+
+    // 关闭：隐藏 + 清空两个状态
+    closeBtn?.addEventListener('click', function () {
+        editor.hidden = true;
+        restore.hidden = false;
+        editor.classList.remove('maximized');
+        editor.classList.remove('minimized');
+    });
+
+    // ESC 退出最大化
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && editor.classList.contains('maximized')) {
+            editor.classList.remove('maximized');
+        }
     });
 
     // 关闭：隐藏编辑器，显示恢复按钮
@@ -273,6 +377,7 @@ function initEditor() {
         editor.hidden = true;
         restore.hidden = false;
         editor.classList.remove('maximized');
+        editor.classList.remove('minimized');
     });
 
     // 重新打开
@@ -281,10 +386,110 @@ function initEditor() {
         restore.hidden = true;
     });
 
+        // Run 按钮
+    var runBtn    = document.getElementById('editorRun');
+    var runLabel  = runBtn ? runBtn.querySelector('.run-label') : null;
+    var output    = document.getElementById('editorOutput');
+    var outputBody = document.getElementById('outputBody');
+    var outputClose = document.getElementById('outputClose');
+
+    var outputLines = [
+        'TigerFong — 前端 / 游戏程序',
+        '学生。平时写点网页，也在学着做游戏。',
+        '  · 网页 —— 从设计到前端，自己搭',
+        '  · 桌宠 —— WPF + 大模型，能对话',
+        '  · 游戏 —— Unity 项目，程序归我',
+        '  · 后端 —— 碰过一点，还在学'
+    ];
+
+    var runTimer = null;
+
+    if (runBtn && output && outputBody) {
+        runBtn.addEventListener('click', function () {
+            if (runBtn.classList.contains('running')) return;
+
+            runBtn.classList.add('running');
+            if (runLabel) runLabel.textContent = 'Running…';
+
+            output.hidden = false;
+            outputBody.textContent = '';
+
+            var i = 0;
+            clearInterval(runTimer);
+
+            // 启动延迟，模拟 Python 启动
+            setTimeout(function () {
+                runTimer = setInterval(function () {
+                    if (i >= outputLines.length) {
+                        clearInterval(runTimer);
+                        runBtn.classList.remove('running');
+                        if (runLabel) runLabel.textContent = 'Run';
+                        return;
+                    }
+                    outputBody.textContent += outputLines[i] + '\n';
+                    i++;
+                }, 80);
+            }, 260);
+        });
+    }
+
+    if (outputClose && output) {
+        outputClose.addEventListener('click', function () {
+            clearInterval(runTimer);
+            output.hidden = true;
+        });
+    }
+}
+
+/* ============================================================
+   10. CMD 窗口操作
+   ============================================================ */
+function initCmd() {
+    var cmd      = document.getElementById('cmd');
+    var minBtn   = document.getElementById('cmdMin');
+    var maxBtn   = document.getElementById('cmdMax');
+    var closeBtn = document.getElementById('cmdClose');
+    var restore  = document.getElementById('cmdRestore');
+    var restoreBtn = document.getElementById('cmdRestoreBtn');
+
+    if (!cmd) return;
+
+    // 最小化
+    minBtn?.addEventListener('click', function () {
+        if (cmd.classList.contains('maximized')) {
+            cmd.classList.remove('maximized');
+            cmd.classList.add('minimized');
+            return;
+        }
+        cmd.classList.toggle('minimized');
+    });
+
+    // 最大化
+    maxBtn?.addEventListener('click', function () {
+        if (cmd.classList.contains('minimized')) {
+            cmd.classList.remove('minimized');
+        }
+        cmd.classList.toggle('maximized');
+    });
+
+    // 关闭
+    closeBtn?.addEventListener('click', function () {
+        cmd.hidden = true;
+        restore.hidden = false;
+        cmd.classList.remove('maximized');
+        cmd.classList.remove('minimized');
+    });
+
+    // 重新打开
+    restoreBtn?.addEventListener('click', function () {
+        cmd.hidden = false;
+        restore.hidden = true;
+    });
+
     // ESC 退出最大化
     document.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape' && editor.classList.contains('maximized')) {
-            editor.classList.remove('maximized');
+        if (e.key === 'Escape' && cmd.classList.contains('maximized')) {
+            cmd.classList.remove('maximized');
         }
     });
 }

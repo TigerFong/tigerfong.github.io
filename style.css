@@ -13,7 +13,7 @@
   --accent-dark: #1e4468;
   --accent-soft: #e8eff6;
 
-  --max: 780px;
+  --max: 1020px;
 }
 
 :root[data-theme="dark"] {
@@ -50,7 +50,7 @@ body {
   color: var(--fg);
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
                "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", sans-serif;
-  font-size: 16px;
+  font-size: 17px;
   line-height: 1.75;
   -webkit-font-smoothing: antialiased;
   transition: background-color .3s ease, color .3s ease;
@@ -134,39 +134,10 @@ section[id] { scroll-margin-top: 32px; }
 
 .hero h1 {
   margin: 14px 0 0;
-  font-size: clamp(2.3rem, 6.5vw, 3.4rem);
+  font-size: clamp(2.6rem, 7vw, 4rem);
   line-height: 1.1;
   letter-spacing: -.03em;
   font-weight: 800;
-}
-
-.slogan {
-  margin: 18px 0 0;
-  min-height: 1.7em;
-  max-width: 26em;
-  font-size: clamp(1.05rem, 2.5vw, 1.22rem);
-  line-height: 1.7;
-  color: var(--fg-2);
-}
-.slogan::after {
-  content: "";
-  display: inline-block;
-  width: 2px;
-  height: 1.05em;
-  margin-left: 3px;
-  vertical-align: -.15em;
-  background: var(--accent);
-  animation: caret 1.1s steps(1) infinite;
-}
-
-:root[data-theme="dark"] .hero .eyebrow { color: rgba(255, 255, 255, .62); }
-:root[data-theme="dark"] .hero h1      { color: #ffffff; }
-:root[data-theme="dark"] .hero .slogan { color: rgba(255, 255, 255, .82); }
-:root[data-theme="dark"] .hero .slogan::after { background: #ffffff; }
-
-@keyframes caret {
-  0%, 50%      { opacity: 1; }
-  50.01%, 100% { opacity: 0; }
 }
 
 /* ============================================================
@@ -182,7 +153,7 @@ section[id] { scroll-margin-top: 32px; }
   position: relative;
   margin: 0;
   padding-bottom: 12px;
-  font-size: 1.45rem;
+  font-size: 1.65rem;
   font-weight: 700;
   letter-spacing: -.02em;
 }
@@ -214,7 +185,7 @@ section[id] { scroll-margin-top: 32px; }
 }
 
 /* ============================================================
-   关于我（编辑器窗口）
+   关于我（编辑器窗口）—— 跟随页面主题
    ============================================================ */
 .editor {
     background: var(--surface);
@@ -222,7 +193,7 @@ section[id] { scroll-margin-top: 32px; }
     border-radius: 12px;
     overflow: hidden;
     font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-    transition: border-color .25s;
+    transition: border-color .25s, background-color .3s;
 }
 .editor:hover {
     border-color: var(--accent);
@@ -237,6 +208,7 @@ section[id] { scroll-margin-top: 32px; }
     height: 36px;
     background: var(--bg);
     border-bottom: 1px solid var(--line);
+    transition: background-color .3s, border-color .3s;
 }
 
 .editor-filename {
@@ -279,7 +251,6 @@ section[id] { scroll-margin-top: 32px; }
     transform: translate(-50%, -50%);
 }
 
-/* 最大化按钮 —— 默认：单个方框（点击最大化） */
 .editor-controls .ctrl-max::before {
     width: 10px;
     height: 10px;
@@ -288,7 +259,6 @@ section[id] { scroll-margin-top: 32px; }
     transform: translate(-50%, -50%);
 }
 
-/* 已最大化状态 —— 两个重叠方框（点击还原） */
 .editor.maximized .ctrl-max::before {
     width: 9px;
     height: 9px;
@@ -296,6 +266,10 @@ section[id] { scroll-margin-top: 32px; }
 }
 
 .editor.maximized .ctrl-max::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
     width: 9px;
     height: 9px;
     background: transparent;
@@ -323,27 +297,36 @@ section[id] { scroll-margin-top: 32px; }
 .editor-controls .ctrl-close:hover::before,
 .editor-controls .ctrl-close:hover::after { background: #ffffff; }
 
-/* 最小化 —— 折叠正文 */
-.editor.minimized .editor-body {
+/* 最小化 */
+.editor.minimized .editor-body,
+.editor.minimized .editor-statusbar,
+.editor.minimized .editor-output {
     display: none;
 }
 .editor.minimized .editor-bar {
     border-bottom: none;
 }
 
-/* 最大化 —— 全屏 */
+/* 最大化 */
 .editor.maximized {
     position: fixed;
-    inset: 20px;
+    inset: 0;
     z-index: 500;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, .25);
+    border: none;
+    border-radius: 0;
+    display: flex;
+    flex-direction: column;
+}
+.editor.maximized .editor-bar {
+    flex: none;
 }
 .editor.maximized .editor-body {
-    max-height: calc(100vh - 140px);
+    flex: 1;
+    min-height: 0;
+    max-height: none;
     overflow-y: auto;
 }
 
-/* 关闭后隐藏 */
 .editor[hidden] { display: none; }
 
 /* 重新打开 */
@@ -367,11 +350,13 @@ section[id] { scroll-margin-top: 32px; }
     background: var(--accent);
 }
 
-/* 正文区 */
+/* —— 正文区 —— */
 .editor-body {
-    padding: 16px 0;
-    font-size: .88rem;
-    line-height: 1.95;
+    padding: 14px 0;
+    background: var(--surface);
+    font-size: .95rem;
+    line-height: 1.9;
+    transition: background-color .3s;
 }
 
 .editor-line {
@@ -381,6 +366,9 @@ section[id] { scroll-margin-top: 32px; }
 .editor-line:hover {
     background: var(--bg);
 }
+.editor-line.current {
+    background: var(--accent-soft);
+}
 
 .editor-num {
     flex: none;
@@ -389,30 +377,149 @@ section[id] { scroll-margin-top: 32px; }
     text-align: right;
     font-size: .82rem;
     color: var(--fg-3);
-    opacity: .5;
+    opacity: .6;
     user-select: none;
 }
 
 .editor-text {
     color: var(--fg-2);
     word-break: break-word;
+    white-space: pre-wrap;
 }
-.editor-text.comment {
+
+/* ============================================================
+Python 语法高亮
+============================================================ */
+/* 浅色模式 · VS Code Light+ */
+.editor-text .decl    { color: #0000ff; }   /* class/def/return/for/in */
+.editor-text .kw      { color: #af00db; }   /* 其他关键字（如 if/else） */
+.editor-text .cls     { color: #267f99; }   /* 类名 */
+.editor-text .fn      { color: #795e26; }   /* 函数名 */
+.editor-text .var     { color: #001080; }   /* 变量名 */
+.editor-text .str     { color: #001080; }   /* 字符串 */
+.editor-text .num     { color: #098658; }   /* 数字 */
+.editor-text .comment { color: #008000; font-style: italic; } /* 注释 */
+
+/* 深色模式基础文本颜色（VS Code 默认灰白） */
+:root[data-theme="dark"] .editor-text {
+  color: #d4d4d4; /* 普通符号（=、[ ]、+ 等）的颜色 */
+}
+
+/* 深色模式 · VS Code Dark+（选择器无空格，颜色精准对齐） */
+:root[data-theme="dark"] .editor-text .decl    { color: #c586c0; } /* class/def/return/for/in → 紫红色 */
+:root[data-theme="dark"] .editor-text .kw      { color: #c586c0; } /* 其他关键字 → 紫红色 */
+:root[data-theme="dark"] .editor-text .cls     { color: #4ec9b0; } /* 类名（如 Me）→ 青绿色 */
+:root[data-theme="dark"] .editor-text .fn      { color: #dcdcaa; } /* 函数名（如 __str__、print）→ 黄色 */
+:root[data-theme="dark"] .editor-text .var     { color: #d4d4d4; } /* 变量（如 name、self）→ 浅蓝色 */
+:root[data-theme="dark"] .editor-text .str     { color: #9cdcfe; } /* 字符串 → 橙棕色 */
+:root[data-theme="dark"] .editor-text .num     { color: #b5cea8; } /* 数字 → 浅绿色 */
+:root[data-theme="dark"] .editor-text .comment { color: #6a9955; } /* 注释 → 深绿色 */
+
+/* 小屏隐藏行号 */
+@media (max-width: 480px) {
+    .editor-num { display: none; }
+    .editor-line { padding-left: 18px; }
+}
+
+/* ============================================================
+   编辑器 · 状态栏 & Run & 输出
+   ============================================================ */
+.editor-statusbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 14px;
+    background: var(--bg);
+    border-top: 1px solid var(--line);
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: .76rem;
     color: var(--fg-3);
-    font-style: italic;
+    transition: background-color .3s, border-color .3s;
 }
 
-/* 语法高亮 */
-.editor-text .kw      { color: #c678dd; font-weight: 600; }
-.editor-text .var     { color: #e06c75; }
-.editor-text .prop    { color: #61afef; }
-.editor-text .str     { color: #98c379; }
-.editor-text .comment { color: var(--fg-3); font-style: italic; }
+.run-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 14px;
+    font-family: inherit;
+    font-size: .76rem;
+    font-weight: 600;
+    color: #fff;
+    background: #16a34a;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    letter-spacing: .04em;
+    transition: background-color .2s, transform .12s;
+}
+.run-btn:hover { background: #15803d; }
+.run-btn:active { transform: scale(.95); }
+.run-btn svg { width: 10px; height: 10px; }
+.run-btn.running {
+    background: #ca8a04;
+    pointer-events: none;
+}
 
-:root[data-theme="dark"] .editor-text .kw   { color: #c678dd; }
-:root[data-theme="dark"] .editor-text .var  { color: #e06c75; }
-:root[data-theme="dark"] .editor-text .prop { color: #61afef; }
-:root[data-theme="dark"] .editor-text .str  { color: #98c379; }
+.status-info {
+    letter-spacing: .04em;
+}
+
+/* 输出区 */
+.editor-output {
+    background: #1e1e1e;
+    color: #d4d4d4;
+    border-top: 1px solid #333;
+}
+.editor-output[hidden] { display: none; }
+
+.output-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 14px;
+    background: #252526;
+    color: #cccccc;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: .74rem;
+    letter-spacing: .04em;
+    border-bottom: 1px solid #333;
+}
+
+.output-close {
+    display: grid;
+    place-items: center;
+    width: 20px;
+    height: 20px;
+    padding: 0;
+    color: #999;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    border-radius: 3px;
+    transition: background-color .15s, color .15s;
+}
+.output-close:hover {
+    background: rgba(255, 255, 255, .1);
+    color: #fff;
+}
+
+.output-body {
+    margin: 0;
+    padding: 14px 18px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: .84rem;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    word-break: break-word;
+    max-height: 260px;
+    overflow-y: auto;
+}
+
+/* 最大化时输出区也跟着撑开 */
+.editor.maximized .editor-output {
+    flex: none;
+}
 
 /* 小屏幕上隐藏行号 */
 @media (max-width: 480px) {
@@ -429,11 +536,75 @@ section[id] { scroll-margin-top: 32px; }
   list-style: none;
 }
 .chips li {
-  padding: 4px 14px;
-  font-size: .82rem;
-  color: var(--accent);
-  background: var(--accent-soft);
-  border-radius: 999px;
+    position: relative;
+    padding: 5px 16px;
+    font-size: .88rem;
+    color: var(--accent);
+    background: var(--accent-soft);
+    border-radius: 999px;
+    cursor: default;
+    transition: background-color .2s, transform .2s;
+}
+.chips li:hover {
+    background: var(--accent);
+    color: #fff;
+    transform: translateY(-2px);
+}
+
+/* 悬停提示 */
+.chips li::after {
+    content: attr(data-tip);
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%) translateY(4px);
+    padding: 6px 12px;
+    background: var(--fg);
+    color: var(--surface);
+    font-size: .74rem;
+    line-height: 1.4;
+    letter-spacing: .02em;
+    white-space: nowrap;
+    border-radius: 6px;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity .2s ease, transform .25s cubic-bezier(.34, 1.56, .64, 1),
+                visibility .2s;
+    z-index: 10;
+}
+.chips li::before {
+    content: "";
+    position: absolute;
+    bottom: calc(100% + 3px);
+    left: 50%;
+    transform: translateX(-50%) translateY(4px);
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid var(--fg);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity .2s ease, transform .25s cubic-bezier(.34, 1.56, .64, 1),
+                visibility .2s;
+    z-index: 10;
+}
+
+.chips li:hover::after,
+.chips li:hover::before {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .chips li,
+    .chips li::after,
+    .chips li::before {
+        transition: none;
+    }
 }
 
 /* ============================================================
@@ -448,7 +619,7 @@ section[id] { scroll-margin-top: 32px; }
         0 24px 60px -12px rgba(0, 0, 0, .4),
         0 10px 24px -8px rgba(0, 0, 0, .28);
     font-family: "Cascadia Mono", "Consolas", ui-monospace, SFMono-Regular, Menlo, monospace;
-    font-size: .86rem;
+    font-size: .95rem;
     line-height: 1.65;
     color: #cccccc;
 }
@@ -634,6 +805,79 @@ section[id] { scroll-margin-top: 32px; }
     vertical-align: -.15em;
     animation: cmd-blink 1.1s steps(1) infinite;
 }
+
+/* ============================================================
+   CMD 窗口操作
+   ============================================================ */
+
+/* 最小化：折叠内容区，只留标题栏 */
+.cmd.minimized .cmd-body {
+    display: none;
+}
+.cmd.minimized .cmd-bar {
+    border-bottom: none;
+}
+
+/* 最大化：铺满整个视口 */
+.cmd.maximized {
+    position: fixed;
+    inset: 0;
+    z-index: 500;
+    border-radius: 0;
+    display: flex;
+    flex-direction: column;
+}
+.cmd.maximized .cmd-bar {
+    flex: none;
+}
+.cmd.maximized .cmd-body {
+    flex: 1;
+    min-height: 0;
+    max-height: none;
+    overflow-y: auto;
+}
+
+/* 最大化状态下的还原图标（两个重叠方框） */
+.cmd.maximized .cmd-max::before {
+    width: 9px;
+    height: 9px;
+    transform: translate(-50%, -50%) translate(2px, 2px);
+}
+.cmd.maximized .cmd-max::after {
+    width: 9px;
+    height: 9px;
+    background: transparent;
+    border: 1px solid #cccccc;
+    transform: translate(-50%, -50%) translate(-2px, -2px);
+    clip-path: polygon(0 0, 100% 0, 100% 22%, 22% 22%, 22% 100%, 0 100%);
+}
+
+/* 关闭后隐藏 */
+.cmd[hidden] { display: none; }
+
+/* 重新打开按钮 */
+.cmd-restore {
+    padding: 20px 0;
+    text-align: center;
+}
+.cmd-restore[hidden] { display: none; }
+.cmd-restore button {
+    padding: 10px 22px;
+    font-size: .85rem;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    color: #61d6d6;
+    background: transparent;
+    border: 1px solid #61d6d6;
+    border-radius: 2px;
+    cursor: pointer;
+    letter-spacing: .04em;
+    transition: background-color .2s, color .2s;
+}
+.cmd-restore button:hover {
+    color: #0c0c0c;
+    background: #61d6d6;
+}
+
 @keyframes cmd-blink {
     0%, 50%      { opacity: 1; }
     50.01%, 100% { opacity: 0; }
@@ -718,9 +962,12 @@ section[id] { scroll-margin-top: 32px; }
 .contact-card-primary .contact-card-name {
     font-size: .76rem;
 }
+.contact-card:not(.contact-card-primary) {
+    grid-column: 1 / -1;
+}
 
 .contact-card-value {
-    font-size: .95rem;
+    font-size: 1.05rem; 
     font-weight: 600;
     letter-spacing: -.01em;
     color: var(--fg);
@@ -1028,6 +1275,356 @@ section[id] { scroll-margin-top: 32px; }
     box-shadow: 0 0 0 3px rgba(34, 197, 94, .18);
     animation: status-pulse 2s ease-in-out infinite;
 }
+
+/* ============================================================
+   联系我（RPG 存档界面）
+   ============================================================ */
+.rpg {
+    background: var(--surface);
+    border: 2px solid var(--fg);
+    border-radius: 4px;
+    box-shadow: 4px 4px 0 var(--fg);
+    overflow: hidden;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+:root[data-theme="dark"] .rpg {
+    border-color: var(--accent);
+    box-shadow: 4px 4px 0 var(--accent);
+}
+
+/* —— 顶部状态条 —— */
+.rpg-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 18px;
+    background: var(--fg);
+    color: var(--surface);
+    font-size: .72rem;
+    letter-spacing: .18em;
+    font-weight: 600;
+}
+:root[data-theme="dark"] .rpg-bar {
+    background: var(--accent);
+    color: var(--bg);
+}
+.rpg-bar-status {
+    color: #22c55e;
+    font-weight: 700;
+}
+:root[data-theme="dark"] .rpg-bar-status {
+    color: #0e1013;
+}
+
+/* —— 角色头部 —— */
+.rpg-head {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 24px 26px 20px;
+    border-bottom: 2px dashed var(--line);
+}
+
+.rpg-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.rpg-name {
+    font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+    font-size: 1.5rem;
+    font-weight: 800;
+    letter-spacing: -.02em;
+    color: var(--fg);
+    line-height: 1.15;
+}
+
+.rpg-class {
+    margin-top: 6px;
+    font-size: .74rem;
+    letter-spacing: .14em;
+    color: var(--accent);
+    font-weight: 600;
+}
+
+.rpg-level {
+    margin-top: 4px;
+    font-size: .8rem;
+    color: var(--fg-3);
+    letter-spacing: .06em;
+}
+
+/* —— 技能条 —— */
+.rpg-skills {
+    padding: 16px 26px 18px;
+    border-bottom: 2px dashed var(--line);
+    display: grid;
+    gap: 10px;
+}
+
+.rpg-skill {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: .78rem;
+}
+
+.rpg-skill-name {
+    flex: none;
+    width: 34px;
+    color: var(--fg-2);
+    letter-spacing: .04em;
+}
+
+.rpg-skill-bar {
+    flex: 1;
+    height: 8px;
+    background: var(--line);
+    border-radius: 1px;
+    overflow: hidden;
+    position: relative;
+}
+.rpg-skill-bar i {
+    display: block;
+    height: 100%;
+    width: 0;
+    background: linear-gradient(90deg, var(--accent), var(--accent-dark));
+    border-radius: 1px;
+    background-image:
+        repeating-linear-gradient(
+            90deg,
+            transparent 0,
+            transparent 6px,
+            var(--surface) 6px,
+            var(--surface) 8px
+        ),
+        linear-gradient(90deg, var(--accent), var(--accent-dark));
+    background-blend-mode: multiply;
+    transition: width 1.1s cubic-bezier(.22, 1, .36, 1);
+}
+
+/* 进入视口后才填充 */
+.rpg-skills.in .rpg-skill-bar i {
+    width: var(--fill, 0%);
+}
+
+.rpg-skill-num {
+    flex: none;
+    width: 24px;
+    text-align: right;
+    color: var(--fg-3);
+    font-variant-numeric: tabular-nums;
+}
+
+/* —— 联系方式 —— */
+.rpg-contacts {
+    padding: 6px 0;
+}
+
+.rpg-contact {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 13px 26px;
+    font-size: .9rem;
+    transition: background-color .15s, padding-left .2s;
+    cursor: pointer;
+}
+.rpg-contact:hover {
+    background: var(--accent-soft);
+    padding-left: 32px;
+}
+
+.rpg-contact-key {
+    flex: none;
+    color: var(--accent);
+    font-size: .7rem;
+    transition: transform .2s;
+}
+.rpg-contact:hover .rpg-contact-key {
+    transform: translateX(2px);
+}
+
+.rpg-contact-name {
+    flex: none;
+    width: 68px;
+    font-size: .74rem;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--fg-3);
+}
+
+.rpg-contact-value {
+    flex: 1;
+    min-width: 0;
+    font-weight: 600;
+    letter-spacing: -.005em;
+    color: var(--fg);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.rpg-contact-arrow {
+    flex: none;
+    color: var(--fg-3);
+    transition: color .2s, transform .2s;
+}
+.rpg-contact:hover .rpg-contact-arrow {
+    color: var(--accent);
+    transform: translateX(4px);
+}
+
+/* 复制按钮 */
+.rpg-copy {
+    flex: none;
+    padding: 4px 12px;
+    font-size: .74rem;
+    font-family: inherit;
+    color: var(--accent);
+    background: transparent;
+    border: 1.5px solid var(--accent);
+    border-radius: 2px;
+    cursor: pointer;
+    letter-spacing: .04em;
+    transition: color .15s, background-color .15s;
+}
+.rpg-copy:hover {
+    color: var(--surface);
+    background: var(--accent);
+}
+.rpg-copy.done {
+    color: var(--surface);
+    background: #0b7a4b;
+    border-color: #0b7a4b;
+}
+
+/* —— 底部说明 —— */
+.rpg-footer {
+    padding: 18px 26px 22px;
+    font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+    font-size: .88rem;
+    line-height: 1.75;
+    color: var(--fg-2);
+    background: var(--bg);
+    border-top: 2px dashed var(--line);
+}
+
+/* ============================================================
+   RPG 特效
+   ============================================================ */
+
+/* ① CRT 扫描线 */
+.rpg {
+    position: relative;
+}
+.rpg-scanlines {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 5;
+    background: repeating-linear-gradient(
+        0deg,
+        rgba(0, 0, 0, .035) 0px,
+        rgba(0, 0, 0, .035) 1px,
+        transparent 1px,
+        transparent 3px
+    );
+    mix-blend-mode: multiply;
+}
+:root[data-theme="dark"] .rpg-scanlines {
+    background: repeating-linear-gradient(
+        0deg,
+        rgba(0, 0, 0, .22) 0px,
+        rgba(0, 0, 0, .22) 1px,
+        transparent 1px,
+        transparent 3px
+    );
+    mix-blend-mode: normal;
+}
+
+/* ② 头像呼吸 */
+.rpg-avatar {
+    flex: none;
+    width: 68px;
+    height: 68px;
+    background: var(--accent-soft);
+    border: 2px solid var(--accent);
+    border-radius: 50%;
+    overflow: hidden;
+    animation: rpg-breathe 2.6s ease-in-out infinite;
+}
+.rpg-avatar img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    image-rendering: auto;
+}
+@keyframes rpg-breathe {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-3px); }
+}
+
+/* ③ 底部按键提示 */
+.rpg-hint {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    padding: 10px 26px;
+    background: var(--fg);
+    color: var(--surface);
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: .7rem;
+    letter-spacing: .12em;
+    border-top: 2px solid var(--fg);
+}
+:root[data-theme="dark"] .rpg-hint {
+    background: var(--accent);
+    color: var(--bg);
+    border-top-color: var(--accent);
+}
+
+.rpg-key {
+    display: inline-block;
+    padding: 1px 6px;
+    margin-right: 4px;
+    background: rgba(255, 255, 255, .12);
+    border: 1px solid rgba(255, 255, 255, .25);
+    border-radius: 2px;
+    font-size: .68rem;
+    font-weight: 700;
+}
+:root[data-theme="dark"] .rpg-key {
+    background: rgba(0, 0, 0, .2);
+    border-color: rgba(0, 0, 0, .35);
+}
+
+/* ④ 底部说明去掉圆角，接住按键提示 */
+.rpg-footer {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+/* 减少动效 */
+@media (prefers-reduced-motion: reduce) {
+    .rpg-avatar { animation: none; }
+}
+
+/* —— 小屏 —— */
+@media (max-width: 560px) {
+    .rpg-head { padding: 20px 20px 16px; gap: 14px; }
+    .rpg-avatar { width: 56px; height: 56px; }
+    .rpg-avatar svg { width: 30px; height: 30px; }
+    .rpg-name { font-size: 1.25rem; }
+    .rpg-skills { padding: 14px 20px 16px; }
+    .rpg-contact { padding: 12px 20px; gap: 8px; }
+    .rpg-contact-name { width: 56px; font-size: .68rem; }
+    .rpg-contact-value { font-size: .85rem; }
+    .rpg-footer { padding: 16px 20px 20px; font-size: .84rem; }
+}
+
 @keyframes status-pulse {
     0%, 100% { opacity: 1; }
     50%      { opacity: .5; }
@@ -1054,7 +1651,6 @@ section[id] { scroll-margin-top: 32px; }
   html { scroll-behavior: auto; }
   .js .reveal { opacity: 1; transform: none; transition: none; }
   .theme-toggle:hover { transform: none; }
-  .slogan::after { animation: none; }
 }
 
 @media (max-width: 480px) {
