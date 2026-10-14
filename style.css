@@ -1978,3 +1978,13 @@ Python 语法高亮
 :root[data-theme="dark"] .copy-particle {
     background: #4ade80;
 }
+
+/* CMD 项目备注（像代码注释） */
+.cmd-note {
+    margin-top: 6px;
+    font-size: .82rem;
+    line-height: 1.6;
+    color: #6a9955;
+    font-style: italic;
+    letter-spacing: .01em;
+}
