@@ -2,382 +2,203 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>高二冲刺目标 Dashboard</title>
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="高二目标">
-    <meta name="theme-color" content="#0f172a">
-    <link rel="icon" href="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f3af.png">
-    <link rel="apple-touch-icon" href="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f3af.png">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>上海交大保送作战面板</title>
     <style>
         :root {
-            --bg-color: #0f172a;
-            --card-bg: #1e293b;
-            --text-main: #f8fafc;
-            --text-sub: #94a3b8;
-            --accent-blue: #38bdf8;
-            --accent-green: #4ade80;
-            --accent-red: #f43f5e;
-            --accent-yellow: #fbbf24;
-            --border-color: #334155;
+            --bg: #121212;
+            --card-bg: #1e1e1e;
+            --text: #e0e0e0;
+            --danger: #ff4c4c;
+            --warning: #ffb84d;
+            --success: #4caf50;
+            --accent: #3b82f6;
         }
-        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-main);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 15px;
             line-height: 1.5;
-            padding: 16px;
-            padding-bottom: 40px;
-            padding-bottom: env(safe-area-inset-bottom);
         }
-        .header { text-align: center; margin-bottom: 20px; padding-top: 10px; }
-        .header h1 { font-size: 22px; font-weight: 700; margin-bottom: 8px; background: linear-gradient(90deg, var(--accent-blue), var(--accent-green)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .header p { font-size: 13px; color: var(--text-sub); }
+        .container { max-width: 800px; margin: 0 auto; }
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #333;
+            padding-bottom: 15px;
+        }
+        h1 { margin: 0; font-size: 24px; color: #fff; }
+        .countdown { font-size: 18px; color: var(--warning); font-weight: bold; margin-top: 5px; }
         
-        .time-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
-        .time-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 12px; text-align: center; }
-        .time-card .label { font-size: 12px; color: var(--text-sub); margin-bottom: 4px; }
-        .time-card .value { font-size: 22px; font-weight: 800; color: var(--accent-yellow); }
-        .time-card .unit { font-size: 12px; color: var(--text-sub); }
-        .time-card.urgent .value { color: var(--accent-red); animation: pulse 2s infinite; }
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.7; } 100% { opacity: 1; } }
+        .grid { display: grid; grid-template-columns: 1fr; gap: 15px; }
+        @media(min-width: 600px) { .grid { grid-template-columns: 1fr 1fr; } }
 
-        .progress-container { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 12px; margin-bottom: 24px; }
-        .progress-header { display: flex; justify-content: space-between; font-size: 12px; color: var(--text-sub); margin-bottom: 8px; }
-        .progress-bar-bg { background: rgba(255,255,255,0.05); height: 8px; border-radius: 4px; overflow: hidden; }
-        .progress-bar-fill { background: linear-gradient(90deg, var(--accent-blue), var(--accent-green)); height: 100%; border-radius: 4px; transition: width 0.5s ease; }
-
-        .habit-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 24px; }
-        .habit-btn {
-            background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 14px 10px;
-            text-align: center; cursor: pointer; transition: all 0.2s ease; position: relative; overflow: hidden;
+        .card {
+            background: var(--card-bg);
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
         }
-        .habit-btn:active { transform: scale(0.96); }
-        .habit-btn.completed { border-color: var(--accent-green); background: rgba(74, 222, 128, 0.08); }
-        .habit-btn.completed .habit-icon { transform: scale(1.2); }
-        .habit-icon { font-size: 24px; margin-bottom: 6px; display: block; transition: transform 0.2s; }
-        .habit-name { font-size: 13px; font-weight: 600; color: var(--text-main); }
-        .habit-check { position: absolute; top: 6px; right: 6px; width: 16px; height: 16px; border-radius: 50%; border: 2px solid var(--border-color); display: flex; align-items: center; justify-content: center; font-size: 10px; color: transparent; transition: all 0.2s; }
-        .habit-btn.completed .habit-check { background: var(--accent-green); border-color: var(--accent-green); color: #fff; }
-
-        .pomodoro-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 20px; text-align: center; margin-bottom: 24px; }
-        .pomo-time { font-size: 48px; font-weight: 800; font-variant-numeric: tabular-nums; color: var(--text-main); margin: 10px 0; letter-spacing: 2px; }
-        .pomo-controls { display: flex; justify-content: center; gap: 12px; }
-        .pomo-btn { padding: 8px 20px; border-radius: 20px; border: none; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
-        .pomo-btn:active { transform: scale(0.95); }
-        .btn-start { background: var(--accent-green); color: #0f172a; }
-        .btn-reset { background: rgba(255,255,255,0.1); color: var(--text-sub); }
-
-        .avg-tracker { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px; }
-        .avg-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 12px; text-align: center; position: relative; overflow: hidden; }
-        .avg-card::after { content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 3px; }
-        .avg-card.p1::after { background: var(--accent-blue); } .avg-card.p2::after { background: var(--accent-yellow); }
-        .avg-card.p3::after { background: var(--accent-green); } .avg-card.final::after { background: var(--accent-red); }
-        .avg-card .label { font-size: 12px; color: var(--text-sub); margin-bottom: 4px; }
-        .avg-card .value { font-size: 24px; font-weight: 800; color: var(--text-main); }
-        .avg-card.final .value { color: var(--accent-green); text-shadow: 0 0 10px rgba(74, 222, 128, 0.3); }
-        .section-title { font-size: 16px; font-weight: 600; margin-bottom: 12px; padding-left: 8px; border-left: 3px solid var(--accent-blue); }
-        .card-list { display: flex; flex-direction: column; gap: 12px; }
-        .subject-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 14px; position: relative; overflow: hidden; }
-        .subject-card::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; }
-        .subject-card.type-core::before { background: var(--accent-blue); } .subject-card.type-geek::before { background: var(--accent-yellow); }
-        .subject-card.type-attitude::before { background: var(--accent-green); } .subject-card.type-danger::before { background: var(--accent-red); }
-        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-        .subject-name { font-size: 16px; font-weight: 600; }
-        .subject-tag { font-size: 10px; padding: 2px 6px; border-radius: 4px; font-weight: 600; }
-        .tag-core { background: rgba(56, 189, 248, 0.15); color: var(--accent-blue); } .tag-geek { background: rgba(251, 191, 36, 0.15); color: var(--accent-yellow); }
-        .tag-attitude { background: rgba(74, 222, 128, 0.15); color: var(--accent-green); } .tag-danger { background: rgba(244, 63, 94, 0.15); color: var(--accent-red); }
-        .tag-weight { background: rgba(244, 63, 94, 0.2); color: var(--accent-red); border: 1px solid var(--accent-red); }
-        .scores-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 12px; }
-        .score-item { text-align: center; background: rgba(255, 255, 255, 0.03); border-radius: 8px; padding: 8px 0; }
-        .score-label { font-size: 11px; color: var(--text-sub); margin-bottom: 4px; }
-        .score-value { font-size: 18px; font-weight: 700; color: var(--text-main); }
-        .strategy-text { font-size: 12px; color: var(--text-sub); line-height: 1.4; padding-top: 10px; border-top: 1px dashed var(--border-color); }
-        .strategy-text strong { color: var(--text-main); }
-        .footer-note { text-align: center; font-size: 12px; color: var(--text-sub); margin-top: 30px; padding: 16px; background: rgba(56, 189, 248, 0.05); border-radius: 12px; border: 1px dashed var(--accent-blue); }
+        .card h2 { margin-top: 0; font-size: 18px; border-bottom: 1px solid #333; padding-bottom: 8px; }
+        
+        /* 分数条样式 */
+        .score-row { display: flex; justify-content: space-between; margin-bottom: 5px; font-size: 14px; font-weight: bold;}
+        .progress-bg { background: #333; height: 10px; border-radius: 5px; overflow: hidden; margin-bottom: 12px;}
+        .progress-bar { height: 100%; transition: width 0.5s; }
+        
+        /* 专项任务样式 */
+        .task-item {
+            display: flex; align-items: center; margin-bottom: 10px; cursor: pointer;
+            padding: 8px; background: #252525; border-radius: 6px;
+        }
+        .task-item input { margin-right: 10px; width: 18px; height: 18px; cursor: pointer;}
+        .task-item.completed label { text-decoration: line-through; color: #777; }
+        .task-desc { font-size: 12px; color: #888; margin-left: 28px; margin-top: -5px; margin-bottom: 10px;}
     </style>
 </head>
 <body>
-    <div class="header">
-        <h1>高二冲刺目标 Dashboard</h1>
-        <p>加权均分 90+ (总权重14.5) | 单科底线 75+ | 操行 A-</p>
-    </div>
+    <div class="container">
+        <header>
+            <h1>🎯 交大保送作战面板</h1>
+            <div class="countdown" id="countdown">距离决战还有: 计算中...</div>
+        </header>
 
-    <div class="time-grid">
-        <div class="time-card" id="card-p1">
-            <div class="label">距离第一段考试<br><span style="font-size:10px">12月2日</span></div>
-            <div class="value" id="days-p1">--</div>
-            <div class="unit">Days</div>
-        </div>
-        <div class="time-card">
-            <div class="label">距离寒假解放<br><span style="font-size:10px">1月31日</span></div>
-            <div class="value" id="days-break">--</div>
-            <div class="unit">Days</div>
-        </div>
-    </div>
-    
-    <div class="progress-container">
-        <div class="progress-header">
-            <span>📅 上学期进度 (9.1 - 1.30)</span>
-            <span id="progress-text">0%</span>
-        </div>
-        <div class="progress-bar-bg">
-            <div class="progress-bar-fill" id="progress-fill" style="width: 0%"></div>
-        </div>
-    </div>
-
-    <div class="section-title">✅ 每日极客打卡 (Daily Habits)</div>
-    <div class="habit-grid" id="habit-grid">
-        <div class="habit-btn" data-habit="english">
-            <div class="habit-check">✓</div>
-            <span class="habit-icon">📖</span>
-            <div class="habit-name">英语降维<br><span style="font-size:10px;color:var(--text-sub)">背30个单词</span></div>
-        </div>
-        <div class="habit-btn" data-habit="github">
-            <div class="habit-check">✓</div>
-            <span class="habit-icon">💻</span>
-            <div class="habit-name">GitHub Commit<br><span style="font-size:10px;color:var(--text-sub)">保持绿格子</span></div>
-        </div>
-        <div class="habit-btn" data-habit="sport">
-            <div class="habit-check">✓</div>
-            <span class="habit-icon">🏃</span>
-            <div class="habit-name">体育特训<br><span style="font-size:10px;color:var(--text-sub)">核心/体测项目</span></div>
-        </div>
-        <div class="habit-btn" data-habit="review">
-            <div class="habit-check">✓</div>
-            <span class="habit-icon">📝</span>
-            <div class="habit-name">错题清零<br><span style="font-size:10px;color:var(--text-sub)">整理今日错题</span></div>
-        </div>
-    </div>
-
-    <div class="section-title">️ 专注番茄钟 (Pomodoro)</div>
-    <div class="pomodoro-card">
-        <div style="font-size:12px;color:var(--text-sub);margin-bottom:5px;">DEEP WORK SESSION</div>
-        <div class="pomo-time" id="pomo-display">25:00</div>
-        <div class="pomo-controls">
-            <button class="pomo-btn btn-start" id="pomo-start">START</button>
-            <button class="pomo-btn btn-reset" id="pomo-reset">RESET</button>
-        </div>
-    </div>
-
-    <div class="section-title">📊 加权平均分追踪 (总权重 14.5)</div>
-    <div class="avg-tracker">
-        <div class="avg-card p1"><div class="label">第一段 (12月)</div><div class="value">86.5</div></div>
-        <div class="avg-card p2"><div class="label">第二段 (3月)</div><div class="value">89.0</div></div>
-        <div class="avg-card p3"><div class="label">第三段 (7月)</div><div class="value">91.1</div></div>
-        <div class="avg-card final"><div class="label">🎯 学年目标</div><div class="value">90.0+</div></div>
-    </div>
-
-    <div class="section-title"> 核心加权科 (权重 x1.5，拉分引擎)</div>
-    <div class="card-list">
-        <div class="subject-card type-core">
-            <div class="card-header">
-                <span class="subject-name">数学</span>
-                <div><span class="subject-tag tag-weight">x1.5</span> <span class="subject-tag tag-core">王牌</span></div>
+        <div class="grid">
+            <!-- 核心成绩与缺口 -->
+            <div class="card">
+                <h2>📊 成绩与缺口分析</h2>
+                <div id="scores-container"></div>
             </div>
-            <div class="scores-grid"><div class="score-item"><div class="score-label">一</div><div class="score-value">94</div></div><div class="score-item"><div class="score-label">二</div><div class="score-value">96</div></div><div class="score-item"><div class="score-label">三</div><div class="score-value">98</div></div></div>
-            <div class="strategy-text"><strong>策略：</strong>配合拔尖班，死磕压轴题。考到98相当于普通科147分！</div>
-        </div>
-        <div class="subject-card type-core">
-            <div class="card-header">
-                <span class="subject-name">英文</span>
-                <div><span class="subject-tag tag-weight">x1.5</span> <span class="subject-tag tag-core">提分快</span></div>
+
+            <!-- 交大笔试专项 -->
+            <div class="card">
+                <h2>⚔️ 交大笔试特训 (中英数)</h2>
+                <div class="score-row"><span>英语词汇量 (目标4500)</span> <span id="vocab-text">2797 / 4500</span></div>
+                <div class="progress-bg"><div class="progress-bar" id="vocab-bar" style="width: 62%; background: var(--warning);"></div></div>
+                
+                <div class="score-row"><span>语文基础分守住 (默写/文言)</span> <span>必须100%</span></div>
+                <div class="progress-bg"><div class="progress-bar" style="width: 100%; background: var(--success);"></div></div>
+                <p style="font-size:12px; color:#aaa; margin-top:5px;">* 语文是你的生死线，理科决定上限，语文决定你能不能进考场。</p>
             </div>
-            <div class="scores-grid"><div class="score-item"><div class="score-label">一</div><div class="score-value">82</div></div><div class="score-item"><div class="score-label">二</div><div class="score-value">85</div></div><div class="score-item"><div class="score-label">三</div><div class="score-value">88</div></div></div>
-            <div class="strategy-text"><strong>策略：</strong>每日背词，用阅读API文档能力降维打击。会话课多发言拿平时分。</div>
-        </div>
-        <div class="subject-card type-danger">
-            <div class="card-header">
-                <span class="subject-name">中文</span>
-                <div><span class="subject-tag tag-weight">x1.5</span> <span class="subject-tag tag-danger">红线</span></div>
+
+            <!-- 每日打卡 -->
+            <div class="card" style="grid-column: 1 / -1;">
+                <h2>🔥 每日极客打卡 (连续 <span id="streak">0</span> 天)</h2>
+                <div id="tasks-container"></div>
+                <button onclick="resetTasks()" style="margin-top:10px; background:#333; color:#fff; border:none; padding:5px 10px; border-radius:5px; cursor:pointer;">手动重置今日打卡</button>
             </div>
-            <div class="scores-grid"><div class="score-item"><div class="score-label">一</div><div class="score-value">75</div></div><div class="score-item"><div class="score-label">二</div><div class="score-value">77</div></div><div class="score-item"><div class="score-label">三</div><div class="score-value">79</div></div></div>
-            <div class="strategy-text"><strong>策略：</strong>抓基础默写与作文结构。保75底线，权重高绝不能崩。</div>
         </div>
-    </div>
-
-    <div class="section-title" style="margin-top: 24px;"> 王牌与极客主场 (普通权重)</div>
-    <div class="card-list">
-        <div class="subject-card type-core">
-            <div class="card-header"><span class="subject-name">商业数据管理</span><span class="subject-tag tag-core">王牌</span></div>
-            <div class="scores-grid"><div class="score-item"><div class="score-label">一</div><div class="score-value">94</div></div><div class="score-item"><div class="score-label">二</div><div class="score-value">96</div></div><div class="score-item"><div class="score-label">三</div><div class="score-value">97</div></div></div>
-            <div class="strategy-text"><strong>策略：</strong>保持数据敏感度，作业追求完美，稳拿高分。</div>
-        </div>
-        <div class="subject-card type-core">
-            <div class="card-header"><span class="subject-name">材料化学与工程</span><span class="subject-tag tag-core">王牌</span></div>
-            <div class="scores-grid"><div class="score-item"><div class="score-label">一</div><div class="score-value">93</div></div><div class="score-item"><div class="score-label">二</div><div class="score-value">95</div></div><div class="score-item"><div class="score-label">三</div><div class="score-value">96</div></div></div>
-            <div class="strategy-text"><strong>策略：</strong>理科基本盘，消灭粗心失分。</div>
-        </div>
-        <div class="subject-card type-geek">
-            <div class="card-header"><span class="subject-name">多媒体制作</span><span class="subject-tag tag-geek">极客</span></div>
-            <div class="scores-grid"><div class="score-item"><div class="score-label">一</div><div class="score-value">88</div></div><div class="score-item"><div class="score-label">二</div><div class="score-value">92</div></div><div class="score-item"><div class="score-label">三</div><div class="score-value">95</div></div></div>
-            <div class="strategy-text"><strong>策略：</strong>用前端/Python技术降维打击，做出全级最惊艳的作业。</div>
-        </div>
-        <div class="subject-card type-geek">
-            <div class="card-header"><span class="subject-name">HCIA人工智能</span><span class="subject-tag tag-geek">极客</span></div>
-            <div class="scores-grid"><div class="score-item"><div class="score-label">一</div><div class="score-value">88</div></div><div class="score-item"><div class="score-label">二</div><div class="score-value">92</div></div><div class="score-item"><div class="score-label">三</div><div class="score-value">95</div></div></div>
-            <div class="strategy-text"><strong>策略：</strong>结合实操，冲刺高分，为面试积累硬核素材。</div>
-        </div>
-        <div class="subject-card type-core">
-            <div class="card-header"><span class="subject-name">物理科技与工程</span><span class="subject-tag tag-core">中坚</span></div>
-            <div class="scores-grid"><div class="score-item"><div class="score-label">一</div><div class="score-value">91</div></div><div class="score-item"><div class="score-label">二</div><div class="score-value">93</div></div><div class="score-item"><div class="score-label">三</div><div class="score-value">94</div></div></div>
-            <div class="strategy-text"><strong>策略：</strong>建立错题本，配合培优班稳步爬升。</div>
-        </div>
-        <div class="subject-card type-core">
-            <div class="card-header"><span class="subject-name">ICT网络</span><span class="subject-tag tag-core">中坚</span></div>
-            <div class="scores-grid"><div class="score-item"><div class="score-label">一</div><div class="score-value">91</div></div><div class="score-item"><div class="score-label">二</div><div class="score-value">93</div></div><div class="score-item"><div class="score-label">三</div><div class="score-value">94</div></div></div>
-            <div class="strategy-text"><strong>策略：</strong>稳扎稳打，实操与理论并重。</div>
-        </div>
-    </div>
-
-    <div class="section-title" style="margin-top: 24px;">💡 态度提分科 (性价比最高)</div>
-    <div class="card-list">
-        <div class="subject-card type-attitude">
-            <div class="card-header"><span class="subject-name">公民</span><span class="subject-tag tag-attitude">态度</span></div>
-            <div class="scores-grid"><div class="score-item"><div class="score-label">一</div><div class="score-value">85</div></div><div class="score-item"><div class="score-label">二</div><div class="score-value">89</div></div><div class="score-item"><div class="score-label">三</div><div class="score-value">92</div></div></div>
-            <div class="strategy-text"><strong>策略：</strong>笔记最全、作业最工整，拿满态度分。</div>
-        </div>
-        <div class="subject-card type-attitude">
-            <div class="card-header"><span class="subject-name">社会与人文</span><span class="subject-tag tag-attitude">态度</span></div>
-            <div class="scores-grid"><div class="score-item"><div class="score-label">一</div><div class="score-value">86</div></div><div class="score-item"><div class="score-label">二</div><div class="score-value">89</div></div><div class="score-item"><div class="score-label">三</div><div class="score-value">92</div></div></div>
-            <div class="strategy-text"><strong>策略：</strong>背诵+答题踩点，当文科来刷分。</div>
-        </div>
-        <div class="subject-card type-attitude">
-            <div class="card-header"><span class="subject-name">生命科学</span><span class="subject-tag tag-attitude">态度</span></div>
-            <div class="scores-grid"><div class="score-item"><div class="score-label">一</div><div class="score-value">87</div></div><div class="score-item"><div class="score-label">二</div><div class="score-value">89</div></div><div class="score-item"><div class="score-label">三</div><div class="score-value">92</div></div></div>
-            <div class="strategy-text"><strong>策略：</strong>实验报告完美，知识点背熟。</div>
-        </div>
-    </div>
-
-    <div class="section-title" style="margin-top: 24px;">🔴 底线防守科 (保75+)</div>
-    <div class="card-list">
-        <div class="subject-card type-danger">
-            <div class="card-header"><span class="subject-name">体育</span><span class="subject-tag tag-danger">红线</span></div>
-            <div class="scores-grid"><div class="score-item"><div class="score-label">一</div><div class="score-value">75</div></div><div class="score-item"><div class="score-label">二</div><div class="score-value">76</div></div><div class="score-item"><div class="score-label">三</div><div class="score-value">77</div></div></div>
-            <div class="strategy-text"><strong>策略：</strong>问清评分细则，针对性练易拿分项目，绝不拖后腿。</div>
-        </div>
-    </div>
-
-    <div class="footer-note">
-        💡 <strong>git commit -m "daily grind"</strong><br>
-        保持 GitHub 活跃，用代码实力在面试中“乱杀”！
     </div>
 
     <script>
-        function updateTime() {
-            const now = new Date();
-            const dateP1 = new Date('2026-12-02'); 
-            const dateBreak = new Date('2027-01-31'); 
+        // ================= 数据配置区（每次考试后只改这里）=================
+        const data = {
+            chinese: { current: 69, target: 80, name: "语文" }, // 红色警报区
+            english: { current: 82, target: 85, name: "英语" },
+            math: { current: 100, target: 95, name: "数学" }, // 已经超神
+            physics: { current: 95, target: 90, name: "物理" },
+            chemistry: { current: 84, target: 88, name: "化学" },
+            vocab: { current: 2797, target: 4500 }
+        };
+
+        const tasks = [
+            { id: "t1", text: "🧠 语文：背 3 个文言文实词/虚词", desc: "死分，像背化学方程式一样" },
+            { id: "t2", text: "📖 语文：做 1 篇阅读并总结踩分公式", desc: "不要凭感觉，要按点作答" },
+            { id: "t3", text: "📱 英语：墨墨背单词 30新+100复习", desc: "词汇量是生命线" },
+            { id: "t4", text: "📐 数理化：保持手感，刷题", desc: "你的王牌，绝不能掉" }
+        ];
+
+        // 决战日期：2027年交大保送考大概在高三上（2027年10月左右）
+        const targetDate = new Date("2027-10-01T00:00:00").getTime();
+        // ================================================================
+
+        // 渲染成绩单
+        const scoresDiv = document.getElementById("scores-container");
+        for (const [key, item] of Object.entries(data)) {
+            if(key === 'vocab') continue;
+            let gap = (item.target - item.current).toFixed(1);
+            let isDanger = gap > 5; // 缺口大于5分算危险
+            let color = isDanger ? "var(--danger)" : (gap > 0 ? "var(--warning)" : "var(--success)");
+            let width = Math.min((item.current / item.target) * 100, 100);
             
-            const daysP1 = Math.ceil((dateP1 - now) / (1000 * 60 * 60 * 24));
-            const daysBreak = Math.ceil((dateBreak - now) / (1000 * 60 * 60 * 24));
+            let gapText = gap > 0 ? `缺口: ${gap}分` : `超目标: ${Math.abs(gap)}分`;
             
-            const elP1 = document.getElementById('days-p1');
-            const elBreak = document.getElementById('days-break');
-            const cardP1 = document.getElementById('card-p1');
-
-            elP1.innerText = daysP1 > 0 ? daysP1 : 0;
-            elBreak.innerText = daysBreak > 0 ? daysBreak : 0;
-
-            if (daysP1 <= 7 && daysP1 > 0) {
-                cardP1.classList.add('urgent');
-                elP1.style.color = 'var(--accent-red)';
-            }
-
-            const semStart = new Date('2026-09-01');
-            const semEnd = new Date('2027-01-30');
-            const total = semEnd - semStart;
-            const current = now - semStart;
-            let progress = (current / total) * 100;
-            progress = Math.max(0, Math.min(100, progress)); 
-            
-            document.getElementById('progress-text').innerText = progress.toFixed(1) + '%';
-            document.getElementById('progress-fill').style.width = progress + '%';
-        }
-        updateTime();
-        setInterval(updateTime, 60000);
-
-        const habitBtns = document.querySelectorAll('.habit-btn');
-        const todayStr = new Date().toDateString(); 
-
-        function loadHabits() {
-            const savedData = JSON.parse(localStorage.getItem('habits_data') || '{}');
-            if (savedData.date !== todayStr) {
-                habitBtns.forEach(btn => btn.classList.remove('completed'));
-                localStorage.setItem('habits_data', JSON.stringify({ date: todayStr, habits: {} }));
-            } else {
-                habitBtns.forEach(btn => {
-                    const habitName = btn.getAttribute('data-habit');
-                    if (savedData.habits && savedData.habits[habitName]) {
-                        btn.classList.add('completed');
-                    }
-                });
-            }
+            scoresDiv.innerHTML += `
+                <div class="score-row">
+                    <span style="color: ${isDanger ? 'var(--danger)' : 'var(--text)'}">${item.name}</span>
+                    <span style="color: ${color}">${item.current} / ${item.target} (${gapText})</span>
+                </div>
+                <div class="progress-bg">
+                    <div class="progress-bar" style="width: ${width}%; background: ${color};"></div>
+                </div>
+            `;
         }
 
-        habitBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                btn.classList.toggle('completed');
-                const habitName = btn.getAttribute('data-habit');
-                const savedData = JSON.parse(localStorage.getItem('habits_data') || '{ "habits": {} }');
-                savedData.date = todayStr;
-                if (!savedData.habits) savedData.habits = {};
-                savedData.habits[habitName] = btn.classList.contains('completed');
-                localStorage.setItem('habits_data', JSON.stringify(savedData));
-                if (navigator.vibrate) navigator.vibrate(50);
+        // 渲染词汇量
+        document.getElementById("vocab-text").innerText = `${data.vocab.current} / ${data.vocab.target}`;
+        let vocabPct = (data.vocab.current / data.vocab.target) * 100;
+        document.getElementById("vocab-bar").style.width = `${vocabPct}%`;
+
+        // 倒计时逻辑
+        setInterval(() => {
+            const now = new Date().getTime();
+            const distance = targetDate - now;
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            document.getElementById("countdown").innerText = `距离决战还有: ${days} 天`;
+        }, 1000);
+
+        // 打卡逻辑 (LocalStorage)
+        const taskContainer = document.getElementById("tasks-container");
+        let completedTasks = JSON.parse(localStorage.getItem("tasks_" + new Date().toDateString())) || [];
+        let streak = parseInt(localStorage.getItem("streak")) || 0;
+
+        function renderTasks() {
+            taskContainer.innerHTML = "";
+            tasks.forEach(task => {
+                const isChecked = completedTasks.includes(task.id);
+                taskContainer.innerHTML += `
+                    <div>
+                        <label class="task-item ${isChecked ? 'completed' : ''}">
+                            <input type="checkbox" ${isChecked ? 'checked' : ''} onchange="toggleTask('${task.id}')">
+                            <span>${task.text}</span>
+                        </label>
+                        <div class="task-desc">${task.desc}</div>
+                    </div>
+                `;
             });
-        });
-        loadHabits();
-
-        let pomoTime = 25 * 60;
-        let pomoInterval = null;
-        const pomoDisplay = document.getElementById('pomo-display');
-        const btnStart = document.getElementById('pomo-start');
-        const btnReset = document.getElementById('pomo-reset');
-
-        function updatePomoDisplay() {
-            const m = Math.floor(pomoTime / 60).toString().padStart(2, '0');
-            const s = (pomoTime % 60).toString().padStart(2, '0');
-            pomoDisplay.innerText = `${m}:${s}`;
+            document.getElementById("streak").innerText = streak;
         }
 
-        btnStart.addEventListener('click', () => {
-            if (pomoInterval) {
-                clearInterval(pomoInterval);
-                pomoInterval = null;
-                btnStart.innerText = 'RESUME';
-                btnStart.style.background = 'var(--accent-yellow)';
+        function toggleTask(id) {
+            if (completedTasks.includes(id)) {
+                completedTasks = completedTasks.filter(t => t !== id);
             } else {
-                btnStart.innerText = 'PAUSE';
-                btnStart.style.background = 'var(--accent-red)';
-                pomoInterval = setInterval(() => {
-                    if (pomoTime > 0) {
-                        pomoTime--;
-                        updatePomoDisplay();
-                    } else {
-                        clearInterval(pomoInterval);
-                        pomoInterval = null;
-                        btnStart.innerText = 'FINISHED!';
-                        btnStart.style.background = 'var(--accent-green)';
-                        if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
-                        alert('🍅 番茄钟结束！休息 5 分钟，去喝杯水或看看 GitHub。');
-                    }
-                }, 1000);
+                completedTasks.push(id);
             }
-        });
+            localStorage.setItem("tasks_" + new Date().toDateString(), JSON.stringify(completedTasks));
+            
+            // 简单的连续天数逻辑
+            if(completedTasks.length === tasks.length) {
+                let lastDone = localStorage.getItem("lastDone");
+                let today = new Date().toDateString();
+                if(lastDone !== today) {
+                    streak++;
+                    localStorage.setItem("streak", streak);
+                    localStorage.setItem("lastDone", today);
+                }
+            }
+            renderTasks();
+        }
 
-        btnReset.addEventListener('click', () => {
-            clearInterval(pomoInterval);
-            pomoInterval = null;
-            pomoTime = 25 * 60;
-            updatePomoDisplay();
-            btnStart.innerText = 'START';
-            btnStart.style.background = 'var(--accent-green)';
-        });
+        function resetTasks() {
+            completedTasks = [];
+            localStorage.setItem("tasks_" + new Date().toDateString(), JSON.stringify(completedTasks));
+            renderTasks();
+        }
+
+        renderTasks();
     </script>
 </body>
 </html>
