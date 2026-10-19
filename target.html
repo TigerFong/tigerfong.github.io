@@ -52,6 +52,18 @@
         .habit-check { position: absolute; top: 4px; right: 4px; width: 14px; height: 14px; border-radius: 50%; border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 8px; color: transparent; }
         .habit-btn.completed .habit-check { background: var(--green); border-color: var(--green); color: #fff; }
 
+        /* 新增：平均分追踪模块样式 */
+        .avg-tracker { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 16px 0; }
+        .avg-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 10px; text-align: center; position: relative; overflow: hidden; }
+        .avg-card .label { font-size: 11px; color: var(--sub); margin-bottom: 4px; }
+        .avg-card .value { font-size: 20px; font-weight: 800; color: var(--text); }
+        .avg-card::after { content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 3px; }
+        .avg-c1::after { background: var(--blue); }
+        .avg-c2::after { background: var(--yellow); }
+        .avg-c3::after { background: var(--green); }
+        .avg-c4::after { background: var(--red); }
+        .avg-c4 .value { color: var(--green); text-shadow: 0 0 5px rgba(74,222,128,0.3); }
+
         .section-title { font-size: 14px; font-weight: 600; margin: 16px 0 10px 0; padding-left: 8px; border-left: 3px solid var(--blue); display: flex; justify-content: space-between; align-items: center;}
         .reset-btn { font-size: 10px; color: var(--sub); background: none; border: 1px solid var(--border); padding: 2px 6px; border-radius: 4px; }
         
@@ -116,7 +128,7 @@
 
     <div class="sjtu-card">
         <div class="sjtu-header">🔥 交大笔试专项</div>
-        <div class="vocab-info"><span> 英语词汇量 (目标4500)</span><span id="vocab-text">2797 / 4500</span></div>
+        <div class="vocab-info"><span>📖 英语词汇量 (目标4500)</span><span id="vocab-text">2797 / 4500</span></div>
         <div class="vocab-bar-bg"><div class="vocab-bar-fill" id="vocab-fill" style="width: 62.1%"></div></div>
         <div class="sjtu-focus">
             📖 语文：<span>文言文实词/默写 / 答题公式</span><br>
@@ -130,21 +142,31 @@
     </div>
     <div class="habit-grid" id="habit-grid"></div>
 
+    <!-- 新增：阶段平均分追踪 -->
+    <div class="avg-tracker">
+        <div class="avg-card avg-c1"><div class="label">第一段目标</div><div class="value">86.5</div></div>
+        <div class="avg-card avg-c2"><div class="label">第二段目标</div><div class="value">89.0</div></div>
+        <div class="avg-card avg-c3"><div class="label">第三段目标</div><div class="value">91.1</div></div>
+        <div class="avg-card avg-c4"><div class="label">🎯 学年目标</div><div class="value">90.0+</div></div>
+    </div>
+
     <div class="section-title">
         <span> 校内加权成绩与缺口预警</span>
-        <button class="reset-btn" onclick="resetScores()">重置分数</button>
+        <div style="display:flex; gap:8px; align-items:center;">
+            <span id="current-avg-display" style="font-size:12px; color:var(--yellow); font-weight:bold;"></span>
+            <button class="reset-btn" onclick="resetScores()">重置</button>
+        </div>
     </div>
     <div id="subject-list"></div>
 
     <script>
-        // 1. 配置数据 (已恢复为最初计算的合理90+冲刺目标)
         var CONFIG = {
             vocab: { current: 2797, target: 4500 },
             habits: [
                 { id: 'english', icon: '📖', name: '背单词30个' }, 
                 { id: 'chinese', icon: '📜', name: '文言/常识' },
                 { id: 'github', icon: '💻', name: 'GitHub Commit' }, 
-                { id: 'sport', icon: '', name: '体育特训' }, 
+                { id: 'sport', icon: '🏃', name: '体育特训' }, 
                 { id: 'review', icon: '📝', name: '错题清零' }
             ],
             subjects: [
@@ -164,15 +186,9 @@
             ]
         };
 
-        // 2. 安全的存储读取
-        function getStorage(key) {
-            try { return JSON.parse(localStorage.getItem(key)) || {}; } catch(e) { return {}; }
-        }
-        function setStorage(key, val) {
-            try { localStorage.setItem(key, JSON.stringify(val)); } catch(e) {}
-        }
+        function getStorage(key) { try { return JSON.parse(localStorage.getItem(key)) || {}; } catch(e) { return {}; } }
+        function setStorage(key, val) { try { localStorage.setItem(key, JSON.stringify(val)); } catch(e) {} }
 
-        // 3. 渲染倒计时 (已修正为正确的2026/2027学年)
         function updateTime() {
             var now = new Date();
             var d1 = Math.ceil((new Date('2026-12-02') - now) / 86400000);
@@ -181,19 +197,14 @@
             document.getElementById('days-break').innerText = d2 > 0 ? d2 : 0;
         }
 
-        // 4. 渲染动态词汇进度条
         function renderVocab() {
-            var c = CONFIG.vocab.current;
-            var t = CONFIG.vocab.target;
-            var p = Math.min(100, (c / t) * 100).toFixed(1);
+            var c = CONFIG.vocab.current; var t = CONFIG.vocab.target;
             document.getElementById('vocab-text').innerText = c + ' / ' + t;
-            document.getElementById('vocab-fill').style.width = p + '%';
+            document.getElementById('vocab-fill').style.width = Math.min(100, (c / t) * 100).toFixed(1) + '%';
         }
 
-        // 5. 渲染打卡
         function renderHabits() {
-            var grid = document.getElementById('habit-grid');
-            grid.innerHTML = '';
+            var grid = document.getElementById('habit-grid'); grid.innerHTML = '';
             var today = new Date().toDateString();
             var data = getStorage('habits_data');
             var streak = parseInt(localStorage.getItem('streak') || '0');
@@ -207,136 +218,104 @@
                 
                 btn.onclick = function() {
                     btn.classList.toggle('completed');
-                    var d = getStorage('habits_data');
-                    d.date = today; if (!d.habits) d.habits = {};
-                    d.habits[h.id] = btn.classList.contains('completed');
-                    setStorage('habits_data', d);
+                    var d = getStorage('habits_data'); d.date = today; if (!d.habits) d.habits = {};
+                    d.habits[h.id] = btn.classList.contains('completed'); setStorage('habits_data', d);
                     
                     var s = parseInt(localStorage.getItem('streak') || '0');
                     var last = localStorage.getItem('lastDate');
                     if (btn.classList.contains('completed')) {
                         if (last !== today) {
                             var yest = new Date(Date.now() - 86400000).toDateString();
-                            if (last === yest) { s++; } else { s = 1; }
-                            localStorage.setItem('streak', s);
-                            localStorage.setItem('lastDate', today);
+                            s = (last === yest) ? s + 1 : 1;
+                            localStorage.setItem('streak', s); localStorage.setItem('lastDate', today);
                         }
                     }
-                    document.getElementById('streak-display').innerText = ' 连续 ' + s + ' 天';
+                    document.getElementById('streak-display').innerText = '🔥 连续 ' + s + ' 天';
                 };
                 grid.appendChild(btn);
             });
         }
 
-        // 6. 渲染成绩
         function renderSubjects() {
-            var list = document.getElementById('subject-list');
-            if (!list) return;
-            list.innerHTML = '';
+            var list = document.getElementById('subject-list'); if (!list) return; list.innerHTML = '';
             var scores = getStorage('user_scores');
+            var totalW = 0; var totalS = 0;
 
             var groups = [
                 { title: '🔴 核心加权科 (x1.5)', items: CONFIG.subjects.filter(function(s){ return s.weight === 1.5; }) },
-                { title: ' 王牌与极客主场', items: CONFIG.subjects.filter(function(s){ return s.weight === 1.0 && s.type === 'core'; }) },
+                { title: '🚀 王牌与极客主场', items: CONFIG.subjects.filter(function(s){ return s.weight === 1.0 && s.type === 'core'; }) },
                 { title: '💡 态度提分科', items: CONFIG.subjects.filter(function(s){ return s.type === 'attitude'; }) },
                 { title: '⚠️ 底线防守科', items: CONFIG.subjects.filter(function(s){ return s.type === 'danger' && s.weight === 1.0; }) }
             ];
 
             groups.forEach(function(g) {
                 if (g.items.length === 0) return;
-                
-                var titleDiv = document.createElement('div');
-                titleDiv.className = 'section-title';
-                titleDiv.innerText = g.title;
-                list.appendChild(titleDiv);
+                var titleDiv = document.createElement('div'); titleDiv.className = 'section-title'; titleDiv.style.marginTop = '16px';
+                titleDiv.innerText = g.title; list.appendChild(titleDiv);
 
                 g.items.forEach(function(sub) {
                     var current = scores[sub.id];
                     var isFilled = (current !== undefined && current !== null && current !== '');
                     var gap = isFilled ? (sub.t3 - parseFloat(current)) : null;
 
-                    var gapHtml = '<span class="gap-indicator gap-wait">待考</span>';
-                    var bgClass = '';
+                    if (isFilled) { totalS += parseFloat(current) * sub.weight; totalW += sub.weight; }
+
+                    var gapHtml = '<span class="gap-indicator gap-wait">待考</span>'; var bgClass = '';
                     if (isFilled) {
-                        // 智能格式化：整数不显示小数
                         var gapDisplay = gap % 1 === 0 ? gap : gap.toFixed(1);
                         if (gap > 0) { gapHtml = '<span class="gap-indicator gap-danger">🔴 缺口:' + gapDisplay + '</span>'; bgClass = 'bg-danger'; }
-                        else { gapHtml = '<span class="gap-indicator gap-safe">🟢 安全</span>'; bgClass = 'bg-safe'; }
+                        else { gapHtml = '<span class="gap-indicator gap-safe"> 安全</span>'; bgClass = 'bg-safe'; }
                     }
 
                     var wTag = sub.weight === 1.5 ? '<span class="tag tag-weight">x1.5</span>' : '';
-                    
-                    var card = document.createElement('div');
-                    card.className = 'subject-card type-' + sub.type + ' ' + bgClass;
+                    var card = document.createElement('div'); card.className = 'subject-card type-' + sub.type + ' ' + bgClass;
                     card.innerHTML = 
-                        '<div class="card-header">' +
-                            '<span class="subject-name">' + sub.name + '</span>' +
-                            '<div class="subject-tags">' + wTag + '<span class="tag tag-' + sub.type + '">' + sub.tag + '</span></div>' +
-                        '</div>' +
-                        '<div class="targets-grid">' +
-                            '<div class="target-item"><div class="target-label">第一段</div><div class="target-val">' + sub.t1 + '</div></div>' +
-                            '<div class="target-item"><div class="target-label">第二段</div><div class="target-val">' + sub.t2 + '</div></div>' +
-                            '<div class="target-item"><div class="target-label">第三段</div><div class="target-val">' + sub.t3 + '</div></div>' +
-                        '</div>' +
-                        '<div class="score-row">' +
-                            '<div>' +
-                                '<span style="font-size:11px;color:var(--sub)">当前:</span> ' +
-                                '<span class="current-val ' + (!isFilled ? 'empty' : '') + '" onclick="editScore(\'' + sub.id + '\', this)">' + (isFilled ? current : '点击录入') + '</span>' +
-                            '</div>' +
-                            gapHtml +
-                        '</div>';
+                        '<div class="card-header"><span class="subject-name">' + sub.name + '</span><div class="subject-tags">' + wTag + '<span class="tag tag-' + sub.type + '">' + sub.tag + '</span></div></div>' +
+                        '<div class="targets-grid"><div class="target-item"><div class="target-label">第一段</div><div class="target-val">' + sub.t1 + '</div></div><div class="target-item"><div class="target-label">第二段</div><div class="target-val">' + sub.t2 + '</div></div><div class="target-item"><div class="target-label">第三段</div><div class="target-val">' + sub.t3 + '</div></div></div>' +
+                        '<div class="score-row"><div><span style="font-size:11px;color:var(--sub)">当前:</span> <span class="current-val ' + (!isFilled ? 'empty' : '') + '" onclick="editScore(\'' + sub.id + '\', this)">' + (isFilled ? current : '点击录入') + '</span></div>' + gapHtml + '</div>';
                     list.appendChild(card);
                 });
             });
+
+            // 更新当前预估均分
+            var avgDisplay = document.getElementById('current-avg-display');
+            if (totalW > 0) {
+                var avg = (totalS / totalW).toFixed(1);
+                avgDisplay.innerText = '当前均分: ' + avg;
+                avgDisplay.style.color = avg >= 90 ? 'var(--green)' : 'var(--yellow)';
+            } else {
+                avgDisplay.innerText = '';
+            }
         }
 
-        // 7. 编辑分数
         window.editScore = function(id, el) {
-            var scores = getStorage('user_scores');
-            var val = scores[id] !== undefined ? scores[id] : '';
+            var scores = getStorage('user_scores'); var val = scores[id] !== undefined ? scores[id] : '';
             el.outerHTML = '<input type="number" inputmode="decimal" step="0.1" class="score-input" id="inp-' + id + '" value="' + val + '" placeholder="0-100">';
-            var inp = document.getElementById('inp-' + id);
-            inp.focus();
-            
+            var inp = document.getElementById('inp-' + id); inp.focus();
             var save = function() {
                 var v = parseFloat(inp.value);
                 if (isNaN(v) || v < 0 || v > 100) { renderSubjects(); return; }
-                scores[id] = v;
-                setStorage('user_scores', scores);
-                renderSubjects();
+                scores[id] = v; setStorage('user_scores', scores); renderSubjects();
             };
-            inp.onblur = save;
-            inp.onkeydown = function(e) { if (e.key === 'Enter') inp.blur(); };
+            inp.onblur = save; inp.onkeydown = function(e) { if (e.key === 'Enter') inp.blur(); };
         };
 
-        window.resetScores = function() {
-            if(confirm('确定清空所有分数？')) { localStorage.removeItem('user_scores'); renderSubjects(); }
-        };
+        window.resetScores = function() { if(confirm('确定清空所有分数？')) { localStorage.removeItem('user_scores'); renderSubjects(); } };
 
-        // 8. SOP 逻辑
         function initSOP() {
-            var today = new Date().toDateString();
-            var saved = getStorage('sop_data');
+            var today = new Date().toDateString(); var saved = getStorage('sop_data');
             var items = document.querySelectorAll('.sop-item');
-            if (saved.date === today && saved.items) {
-                items.forEach(function(it, i) { if (saved.items[i]) it.classList.add('done'); });
-            }
+            if (saved.date === today && saved.items) items.forEach(function(it, i) { if (saved.items[i]) it.classList.add('done'); });
             items.forEach(function(it) {
                 it.onclick = function() {
                     it.classList.toggle('done');
-                    var d = { date: today, items: [] };
-                    items.forEach(function(i) { d.items.push(i.classList.contains('done')); });
+                    var d = { date: today, items: [] }; items.forEach(function(i) { d.items.push(i.classList.contains('done')); });
                     setStorage('sop_data', d);
                 };
             });
         }
 
-        // 启动
-        updateTime();
-        renderVocab();
-        renderHabits();
-        renderSubjects();
-        initSOP();
+        updateTime(); renderVocab(); renderHabits(); renderSubjects(); initSOP();
         setInterval(updateTime, 60000);
     </script>
 </body>
