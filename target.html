@@ -2,19 +2,15 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <!-- 适配手机屏幕，禁止缩放，适配刘海屏 -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>高二冲刺目标</title>
-    
-    <!--  核心：让网页变成桌面 App 的魔法标签 -->
+    <title>高二冲刺目标 Dashboard</title>
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="高二目标">
     <meta name="theme-color" content="#0f172a">
-    <!-- 桌面图标：使用 🎯 靶心 -->
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎯</text></svg>">
-    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22></text></svg>">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22></text></svg>">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎯</text></svg>">
 
     <style>
         :root {
@@ -36,12 +32,53 @@
             line-height: 1.5;
             padding: 16px;
             padding-bottom: 40px;
-            /* 适配刘海屏底部安全区 */
             padding-bottom: env(safe-area-inset-bottom);
         }
         .header { text-align: center; margin-bottom: 20px; padding-top: 10px; }
         .header h1 { font-size: 22px; font-weight: 700; margin-bottom: 8px; background: linear-gradient(90deg, var(--accent-blue), var(--accent-green)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .header p { font-size: 13px; color: var(--text-sub); }
+        
+        /* 倒计时与进度模块 */
+        .time-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+        .time-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 12px; text-align: center; }
+        .time-card .label { font-size: 12px; color: var(--text-sub); margin-bottom: 4px; }
+        .time-card .value { font-size: 22px; font-weight: 800; color: var(--accent-yellow); }
+        .time-card .unit { font-size: 12px; color: var(--text-sub); }
+        .time-card.urgent .value { color: var(--accent-red); animation: pulse 2s infinite; }
+        
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.7; } 100% { opacity: 1; } }
+
+        .progress-container { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 12px; margin-bottom: 24px; }
+        .progress-header { display: flex; justify-content: space-between; font-size: 12px; color: var(--text-sub); margin-bottom: 8px; }
+        .progress-bar-bg { background: rgba(255,255,255,0.05); height: 8px; border-radius: 4px; overflow: hidden; }
+        .progress-bar-fill { background: linear-gradient(90deg, var(--accent-blue), var(--accent-green)); height: 100%; border-radius: 4px; transition: width 0.5s ease; }
+
+        /* 打卡模块 */
+        .habit-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 24px; }
+        .habit-btn {
+            background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 14px 10px;
+            text-align: center; cursor: pointer; transition: all 0.2s ease; position: relative; overflow: hidden;
+        }
+        .habit-btn:active { transform: scale(0.96); }
+        .habit-btn.completed { border-color: var(--accent-green); background: rgba(74, 222, 128, 0.08); }
+        .habit-btn.completed .habit-icon { transform: scale(1.2); }
+        .habit-icon { font-size: 24px; margin-bottom: 6px; display: block; transition: transform 0.2s; }
+        .habit-name { font-size: 13px; font-weight: 600; color: var(--text-main); }
+        .habit-check { position: absolute; top: 6px; right: 6px; width: 16px; height: 16px; border-radius: 50%; border: 2px solid var(--border-color); display: flex; align-items: center; justify-content: center; font-size: 10px; color: transparent; transition: all 0.2s; }
+        .habit-btn.completed .habit-check { background: var(--accent-green); border-color: var(--accent-green); color: #fff; }
+
+        /* 番茄钟模块 */
+        .pomodoro-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 20px; text-align: center; margin-bottom: 24px; }
+        .pomo-time { font-size: 48px; font-weight: 800; font-variant-numeric: tabular-nums; color: var(--text-main); margin: 10px 0; letter-spacing: 2px; }
+        .pomo-controls { display: flex; justify-content: center; gap: 12px; }
+        .pomo-btn {
+            padding: 8px 20px; border-radius: 20px; border: none; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s;
+        }
+        .pomo-btn:active { transform: scale(0.95); }
+        .btn-start { background: var(--accent-green); color: #0f172a; }
+        .btn-reset { background: rgba(255,255,255,0.1); color: var(--text-sub); }
+
+        /* 原有成绩模块样式 */
         .avg-tracker { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px; }
         .avg-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 12px; text-align: center; position: relative; overflow: hidden; }
         .avg-card::after { content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 3px; }
@@ -75,50 +112,230 @@
         <h1>高二冲刺目标 Dashboard</h1>
         <p>单科底线 75+ | 操行 A- | 用代码实力面试乱杀</p>
     </div>
-    <div class="avg-tracker">
-        <div class="avg-card p1"><div class="label">第一段 (破冰)</div><div class="value">86.5</div></div>
-        <div class="avg-card p2"><div class="label">第二段 (发力)</div><div class="value">89.2</div></div>
-        <div class="avg-card p3"><div class="label">第三段 (冲刺)</div><div class="value">91.5</div></div>
-        <div class="avg-card final"><div class="label">🎯 学年目标</div><div class="value">90.0+</div></div>
+
+    <!-- 更新：基于真实校历的时间感知模块 -->
+    <div class="time-grid">
+        <div class="time-card" id="card-p1">
+            <div class="label">距离第一段考试<br><span style="font-size:10px">12月2日</span></div>
+            <div class="value" id="days-p1">--</div>
+            <div class="unit">Days</div>
+        </div>
+        <div class="time-card">
+            <div class="label">距离寒假解放<br><span style="font-size:10px">1月31日</span></div>
+            <div class="value" id="days-break">--</div>
+            <div class="unit">Days</div>
+        </div>
     </div>
-    <div class="section-title">🔴 底线防守科 (保75+)</div>
+    
+    <div class="progress-container">
+        <div class="progress-header">
+            <span>📅 上学期进度 (9.1 - 1.30)</span>
+            <span id="progress-text">0%</span>
+        </div>
+        <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="progress-fill" style="width: 0%"></div>
+        </div>
+    </div>
+
+    <!-- 每日极客打卡模块 -->
+    <div class="section-title">✅ 每日极客打卡 (Daily Habits)</div>
+    <div class="habit-grid" id="habit-grid">
+        <div class="habit-btn" data-habit="english">
+            <div class="habit-check">✓</div>
+            <span class="habit-icon">📖</span>
+            <div class="habit-name">英语降维<br><span style="font-size:10px;color:var(--text-sub)">背30个单词</span></div>
+        </div>
+        <div class="habit-btn" data-habit="github">
+            <div class="habit-check">✓</div>
+            <span class="habit-icon">💻</span>
+            <div class="habit-name">GitHub Commit<br><span style="font-size:10px;color:var(--text-sub)">保持绿格子</span></div>
+        </div>
+        <div class="habit-btn" data-habit="sport">
+            <div class="habit-check">✓</div>
+            <span class="habit-icon"></span>
+            <div class="habit-name">体育特训<br><span style="font-size:10px;color:var(--text-sub)">核心/体测项目</span></div>
+        </div>
+        <div class="habit-btn" data-habit="review">
+            <div class="habit-check">✓</div>
+            <span class="habit-icon">📝</span>
+            <div class="habit-name">错题清零<br><span style="font-size:10px;color:var(--text-sub)">整理今日错题</span></div>
+        </div>
+    </div>
+
+    <!-- 番茄钟模块 -->
+    <div class="section-title">⏱️ 专注番茄钟 (Pomodoro)</div>
+    <div class="pomodoro-card">
+        <div style="font-size:12px;color:var(--text-sub);margin-bottom:5px;">DEEP WORK SESSION</div>
+        <div class="pomo-time" id="pomo-display">25:00</div>
+        <div class="pomo-controls">
+            <button class="pomo-btn btn-start" id="pomo-start">START</button>
+            <button class="pomo-btn btn-reset" id="pomo-reset">RESET</button>
+        </div>
+    </div>
+
+    <!-- 平均分追踪 -->
+    <div class="section-title">📊 阶段平均分追踪</div>
+    <div class="avg-tracker">
+        <div class="avg-card p1"><div class="label">第一段 (12月)</div><div class="value">86.5</div></div>
+        <div class="avg-card p2"><div class="label">第二段 (3月)</div><div class="value">89.2</div></div>
+        <div class="avg-card p3"><div class="label">第三段 (7月)</div><div class="value">91.5</div></div>
+        <div class="avg-card final"><div class="label"> 学年目标</div><div class="value">90.0+</div></div>
+    </div>
+
+    <!-- 各科目标 (精简展示) -->
+    <div class="section-title"> 底线防守科 (保75+)</div>
     <div class="card-list">
         <div class="subject-card type-danger">
             <div class="card-header"><span class="subject-name">体育</span><span class="subject-tag tag-danger">红线</span></div>
-            <div class="scores-grid"><div class="score-item"><div class="score-label">第一段</div><div class="score-value">75</div></div><div class="score-item"><div class="score-label">第二段</div><div class="score-value">76</div></div><div class="score-item"><div class="score-label">第三段</div><div class="score-value">77</div></div></div>
-            <div class="strategy-text"><strong>策略：</strong>问清老师评分细则，针对性练易拿分项目，绝不拖后腿。</div>
+            <div class="scores-grid"><div class="score-item"><div class="score-label">一</div><div class="score-value">75</div></div><div class="score-item"><div class="score-label">二</div><div class="score-value">76</div></div><div class="score-item"><div class="score-label">三</div><div class="score-value">77</div></div></div>
         </div>
         <div class="subject-card type-danger">
             <div class="card-header"><span class="subject-name">中文</span><span class="subject-tag tag-danger">红线</span></div>
-            <div class="scores-grid"><div class="score-item"><div class="score-label">第一段</div><div class="score-value">75</div></div><div class="score-item"><div class="score-label">第二段</div><div class="score-value">77</div></div><div class="score-item"><div class="score-label">第三段</div><div class="score-value">79</div></div></div>
-            <div class="strategy-text"><strong>策略：</strong>抓基础默写与作文结构，保75底线，不浪费过多精力。</div>
+            <div class="scores-grid"><div class="score-item"><div class="score-label">一</div><div class="score-value">75</div></div><div class="score-item"><div class="score-label">二</div><div class="score-value">77</div></div><div class="score-item"><div class="score-label">三</div><div class="score-value">79</div></div></div>
         </div>
     </div>
-    <div class="section-title" style="margin-top: 24px;">🚀 潜力突破口</div>
+
+    <div class="section-title" style="margin-top: 24px;"> 潜力与王牌 (拉高均分)</div>
     <div class="card-list">
         <div class="subject-card type-core">
             <div class="card-header"><span class="subject-name">英文</span><span class="subject-tag tag-core">提分快</span></div>
-            <div class="scores-grid"><div class="score-item"><div class="score-label">第一段</div><div class="score-value">82</div></div><div class="score-item"><div class="score-label">第二段</div><div class="score-value">85</div></div><div class="score-item"><div class="score-label">第三段</div><div class="score-value">88</div></div></div>
-            <div class="strategy-text"><strong>策略：</strong>每日背词，用阅读API文档能力降维打击高中英语。</div>
+            <div class="scores-grid"><div class="score-item"><div class="score-label">一</div><div class="score-value">82</div></div><div class="score-item"><div class="score-label">二</div><div class="score-value">85</div></div><div class="score-item"><div class="score-label">三</div><div class="score-value">88</div></div></div>
+        </div>
+        <div class="subject-card type-core">
+            <div class="card-header"><span class="subject-name">数学</span><span class="subject-tag tag-core">王牌</span></div>
+            <div class="scores-grid"><div class="score-item"><div class="score-label">一</div><div class="score-value">94</div></div><div class="score-item"><div class="score-label">二</div><div class="score-value">96</div></div><div class="score-item"><div class="score-label">三</div><div class="score-value">98</div></div></div>
+        </div>
+        <div class="subject-card type-geek">
+            <div class="card-header"><span class="subject-name">HCIA / 多媒体</span><span class="subject-tag tag-geek">极客</span></div>
+            <div class="scores-grid"><div class="score-item"><div class="score-label">一</div><div class="score-value">88</div></div><div class="score-item"><div class="score-label">二</div><div class="score-value">92</div></div><div class="score-item"><div class="score-label">三</div><div class="score-value">95</div></div></div>
         </div>
     </div>
-    <div class="section-title" style="margin-top: 24px;">💡 态度提分科 (性价比最高)</div>
-    <div class="card-list">
-        <div class="subject-card type-attitude"><div class="card-header"><span class="subject-name">公民</span><span class="subject-tag tag-attitude">态度</span></div><div class="scores-grid"><div class="score-item"><div class="score-label">第一段</div><div class="score-value">85</div></div><div class="score-item"><div class="score-label">第二段</div><div class="score-value">89</div></div><div class="score-item"><div class="score-label">第三段</div><div class="score-value">92</div></div></div><div class="strategy-text"><strong>策略：</strong>笔记最全、作业最工整，拿满态度分。</div></div>
-        <div class="subject-card type-attitude"><div class="card-header"><span class="subject-name">品德</span><span class="subject-tag tag-attitude">态度</span></div><div class="scores-grid"><div class="score-item"><div class="score-label">第一段</div><div class="score-value">85</div></div><div class="score-item"><div class="score-label">第二段</div><div class="score-value">88</div></div><div class="score-item"><div class="score-label">第三段</div><div class="score-value">90</div></div></div><div class="strategy-text"><strong>策略：</strong>课堂表现与服务意识，主动承担班级小职务。</div></div>
-        <div class="subject-card type-attitude"><div class="card-header"><span class="subject-name">社会与人文</span><span class="subject-tag tag-attitude">态度</span></div><div class="scores-grid"><div class="score-item"><div class="score-label">第一段</div><div class="score-value">86</div></div><div class="score-item"><div class="score-label">第二段</div><div class="score-value">89</div></div><div class="score-item"><div class="score-label">第三段</div><div class="score-value">92</div></div></div><div class="strategy-text"><strong>策略：</strong>背诵+答题踩点，当文科来刷分。</div></div>
-        <div class="subject-card type-attitude"><div class="card-header"><span class="subject-name">生命科学</span><span class="subject-tag tag-attitude">态度</span></div><div class="scores-grid"><div class="score-item"><div class="score-label">第一段</div><div class="score-value">87</div></div><div class="score-item"><div class="score-label">第二段</div><div class="score-value">89</div></div><div class="score-item"><div class="score-label">第三段</div><div class="score-value">92</div></div></div><div class="strategy-text"><strong>策略：</strong>实验报告完美，知识点背熟。</div></div>
+
+    <div class="footer-note">
+        💡 <strong>git commit -m "daily grind"</strong><br>
+        保持 GitHub 活跃，用代码实力在面试中“乱杀”！
     </div>
-    <div class="section-title" style="margin-top: 24px;"> 王牌与极客主场 (拉高均分)</div>
-    <div class="card-list">
-        <div class="subject-card type-core"><div class="card-header"><span class="subject-name">数学</span><span class="subject-tag tag-core">王牌</span></div><div class="scores-grid"><div class="score-item"><div class="score-label">第一段</div><div class="score-value">94</div></div><div class="score-item"><div class="score-label">第二段</div><div class="score-value">96</div></div><div class="score-item"><div class="score-label">第三段</div><div class="score-value">98</div></div></div><div class="strategy-text"><strong>策略：</strong>配合拔尖班，死磕压轴题，用接近满分拉高均分。</div></div>
-        <div class="subject-card type-core"><div class="card-header"><span class="subject-name">商业数据管理</span><span class="subject-tag tag-core">王牌</span></div><div class="scores-grid"><div class="score-item"><div class="score-label">第一段</div><div class="score-value">94</div></div><div class="score-item"><div class="score-label">第二段</div><div class="score-value">96</div></div><div class="score-item"><div class="score-label">第三段</div><div class="score-value">97</div></div></div><div class="strategy-text"><strong>策略：</strong>保持数据敏感度，作业追求完美，稳拿高分。</div></div>
-        <div class="subject-card type-core"><div class="card-header"><span class="subject-name">材料化学与工程</span><span class="subject-tag tag-core">王牌</span></div><div class="scores-grid"><div class="score-item"><div class="score-label">第一段</div><div class="score-value">93</div></div><div class="score-item"><div class="score-label">第二段</div><div class="score-value">95</div></div><div class="score-item"><div class="score-label">第三段</div><div class="score-value">96</div></div></div><div class="strategy-text"><strong>策略：</strong>理科基本盘，消灭粗心失分。</div></div>
-        <div class="subject-card type-geek"><div class="card-header"><span class="subject-name">多媒体制作</span><span class="subject-tag tag-geek">极客</span></div><div class="scores-grid"><div class="score-item"><div class="score-label">第一段</div><div class="score-value">88</div></div><div class="score-item"><div class="score-label">第二段</div><div class="score-value">92</div></div><div class="score-item"><div class="score-label">第三段</div><div class="score-value">95</div></div></div><div class="strategy-text"><strong>策略：</strong>用前端/Python技术降维打击，做出全级最惊艳的作业。</div></div>
-        <div class="subject-card type-geek"><div class="card-header"><span class="subject-name">HCIA人工智能</span><span class="subject-tag tag-geek">极客</span></div><div class="scores-grid"><div class="score-item"><div class="score-label">第一段</div><div class="score-value">88</div></div><div class="score-item"><div class="score-label">第二段</div><div class="score-value">92</div></div><div class="score-item"><div class="score-label">第三段</div><div class="score-value">95</div></div></div><div class="strategy-text"><strong>策略：</strong>结合实操，冲刺高分，为面试积累硬核素材。</div></div>
-        <div class="subject-card type-core"><div class="card-header"><span class="subject-name">物理科技与工程</span><span class="subject-tag tag-core">中坚</span></div><div class="scores-grid"><div class="score-item"><div class="score-label">第一段</div><div class="score-value">91</div></div><div class="score-item"><div class="score-label">第二段</div><div class="score-value">93</div></div><div class="score-item"><div class="score-label">第三段</div><div class="score-value">94</div></div></div><div class="strategy-text"><strong>策略：</strong>建立错题本，配合培优班稳步爬升。</div></div>
-        <div class="subject-card type-core"><div class="card-header"><span class="subject-name">ICT网络</span><span class="subject-tag tag-core">中坚</span></div><div class="scores-grid"><div class="score-item"><div class="score-label">第一段</div><div class="score-value">91</div></div><div class="score-item"><div class="score-label">第二段</div><div class="score-value">93</div></div><div class="score-item"><div class="score-label">第三段</div><div class="score-value">94</div></div></div><div class="strategy-text"><strong>策略：</strong>稳扎稳打，实操与理论并重。</div></div>
-    </div>
-    <div class="footer-note">💡 <strong>System Brawler is compiling...</strong><br>保持 GitHub 活跃，用代码实力在面试中“乱杀”！</div>
+
+    <script>
+        // --- 1. 基于真实校历的倒计时与进度逻辑 ---
+        function updateTime() {
+            const now = new Date();
+            // 关键日期 (根据行事历)
+            const dateP1 = new Date('2026-12-02'); // 第一段考试
+            const dateBreak = new Date('2027-01-31'); // 寒假开始
+            
+            // 计算天数
+            const daysP1 = Math.ceil((dateP1 - now) / (1000 * 60 * 60 * 24));
+            const daysBreak = Math.ceil((dateBreak - now) / (1000 * 60 * 60 * 24));
+            
+            const elP1 = document.getElementById('days-p1');
+            const elBreak = document.getElementById('days-break');
+            const cardP1 = document.getElementById('card-p1');
+
+            elP1.innerText = daysP1 > 0 ? daysP1 : 0;
+            elBreak.innerText = daysBreak > 0 ? daysBreak : 0;
+
+            // 如果距离考试小于7天，变红警告
+            if (daysP1 <= 7 && daysP1 > 0) {
+                cardP1.classList.add('urgent');
+                elP1.style.color = 'var(--accent-red)';
+            }
+
+            // 学期进度 (9月1日 - 1月30日)
+            const semStart = new Date('2026-09-01');
+            const semEnd = new Date('2027-01-30');
+            const total = semEnd - semStart;
+            const current = now - semStart;
+            let progress = (current / total) * 100;
+            progress = Math.max(0, Math.min(100, progress)); 
+            
+            document.getElementById('progress-text').innerText = progress.toFixed(1) + '%';
+            document.getElementById('progress-fill').style.width = progress + '%';
+        }
+        updateTime();
+        // 每分钟更新一次
+        setInterval(updateTime, 60000);
+
+        // --- 2. 每日打卡逻辑 (LocalStorage) ---
+        const habitBtns = document.querySelectorAll('.habit-btn');
+        const todayStr = new Date().toDateString(); 
+
+        function loadHabits() {
+            const savedData = JSON.parse(localStorage.getItem('habits_data') || '{}');
+            if (savedData.date !== todayStr) {
+                habitBtns.forEach(btn => btn.classList.remove('completed'));
+                localStorage.setItem('habits_data', JSON.stringify({ date: todayStr, habits: {} }));
+            } else {
+                habitBtns.forEach(btn => {
+                    const habitName = btn.getAttribute('data-habit');
+                    if (savedData.habits && savedData.habits[habitName]) {
+                        btn.classList.add('completed');
+                    }
+                });
+            }
+        }
+
+        habitBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                btn.classList.toggle('completed');
+                const habitName = btn.getAttribute('data-habit');
+                const savedData = JSON.parse(localStorage.getItem('habits_data') || '{ "habits": {} }');
+                savedData.date = todayStr;
+                if (!savedData.habits) savedData.habits = {};
+                savedData.habits[habitName] = btn.classList.contains('completed');
+                localStorage.setItem('habits_data', JSON.stringify(savedData));
+                
+                if (navigator.vibrate) navigator.vibrate(50);
+            });
+        });
+        loadHabits();
+
+        // --- 3. 番茄钟逻辑 ---
+        let pomoTime = 25 * 60;
+        let pomoInterval = null;
+        const pomoDisplay = document.getElementById('pomo-display');
+        const btnStart = document.getElementById('pomo-start');
+        const btnReset = document.getElementById('pomo-reset');
+
+        function updatePomoDisplay() {
+            const m = Math.floor(pomoTime / 60).toString().padStart(2, '0');
+            const s = (pomoTime % 60).toString().padStart(2, '0');
+            pomoDisplay.innerText = `${m}:${s}`;
+        }
+
+        btnStart.addEventListener('click', () => {
+            if (pomoInterval) {
+                clearInterval(pomoInterval);
+                pomoInterval = null;
+                btnStart.innerText = 'RESUME';
+                btnStart.style.background = 'var(--accent-yellow)';
+            } else {
+                btnStart.innerText = 'PAUSE';
+                btnStart.style.background = 'var(--accent-red)';
+                pomoInterval = setInterval(() => {
+                    if (pomoTime > 0) {
+                        pomoTime--;
+                        updatePomoDisplay();
+                    } else {
+                        clearInterval(pomoInterval);
+                        pomoInterval = null;
+                        btnStart.innerText = 'FINISHED!';
+                        btnStart.style.background = 'var(--accent-green)';
+                        if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
+                        alert('🍅 番茄钟结束！休息 5 分钟，去喝杯水或看看 GitHub。');
+                    }
+                }, 1000);
+            }
+        });
+
+        btnReset.addEventListener('click', () => {
+            clearInterval(pomoInterval);
+            pomoInterval = null;
+            pomoTime = 25 * 60;
+            updatePomoDisplay();
+            btnStart.innerText = 'START';
+            btnStart.style.background = 'var(--accent-green)';
+        });
+    </script>
 </body>
 </html>
