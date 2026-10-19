@@ -4,15 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>高二冲刺目标 Dashboard</title>
-    
-    <!-- 核心：App 化标签 -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="高二目标">
     <meta name="theme-color" content="#0f172a">
-    
-    <!-- 修复：使用真实的图片链接作为图标 (Twitter Emoji 靶心) -->
     <link rel="icon" href="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f3af.png">
     <link rel="apple-touch-icon" href="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f3af.png">
 
@@ -125,7 +121,7 @@
     
     <div class="progress-container">
         <div class="progress-header">
-            <span> 上学期进度 (9.1 - 1.30)</span>
+            <span>📅 上学期进度 (9.1 - 1.30)</span>
             <span id="progress-text">0%</span>
         </div>
         <div class="progress-bar-bg">
@@ -180,26 +176,79 @@
         <div class="subject-card type-danger">
             <div class="card-header"><span class="subject-name">体育</span><span class="subject-tag tag-danger">红线</span></div>
             <div class="scores-grid"><div class="score-item"><div class="score-label">一</div><div class="score-value">75</div></div><div class="score-item"><div class="score-label">二</div><div class="score-value">76</div></div><div class="score-item"><div class="score-label">三</div><div class="score-value">77</div></div></div>
+            <div class="strategy-text"><strong>策略：</strong>问清评分细则，针对性练易拿分项目，绝不拖后腿。</div>
         </div>
         <div class="subject-card type-danger">
             <div class="card-header"><span class="subject-name">中文</span><span class="subject-tag tag-danger">红线</span></div>
             <div class="scores-grid"><div class="score-item"><div class="score-label">一</div><div class="score-value">75</div></div><div class="score-item"><div class="score-label">二</div><div class="score-value">77</div></div><div class="score-item"><div class="score-label">三</div><div class="score-value">79</div></div></div>
+            <div class="strategy-text"><strong>策略：</strong>抓基础默写与作文结构，保75底线，不浪费过多精力。</div>
         </div>
     </div>
 
-    <div class="section-title" style="margin-top: 24px;">🚀 潜力与王牌 (拉高均分)</div>
+    <div class="section-title" style="margin-top: 24px;">🚀 潜力突破口</div>
     <div class="card-list">
         <div class="subject-card type-core">
             <div class="card-header"><span class="subject-name">英文</span><span class="subject-tag tag-core">提分快</span></div>
             <div class="scores-grid"><div class="score-item"><div class="score-label">一</div><div class="score-value">82</div></div><div class="score-item"><div class="score-label">二</div><div class="score-value">85</div></div><div class="score-item"><div class="score-label">三</div><div class="score-value">88</div></div></div>
+            <div class="strategy-text"><strong>策略：</strong>每日背词，用阅读API文档能力降维打击高中英语。</div>
         </div>
+    </div>
+
+    <div class="section-title" style="margin-top: 24px;">💡 态度提分科 (性价比最高)</div>
+    <div class="card-list">
+        <div class="subject-card type-attitude">
+            <div class="card-header"><span class="subject-name">公民</span><span class="subject-tag tag-attitude">态度</span></div>
+            <div class="scores-grid"><div class="score-item"><div class="score-label">一</div><div class="score-value">85</div></div><div class="score-item"><div class="score-label">二</div><div class="score-value">89</div></div><div class="score-item"><div class="score-label">三</div><div class="score-value">92</div></div></div>
+            <div class="strategy-text"><strong>策略：</strong>笔记最全、作业最工整，拿满态度分。</div>
+        </div>
+        <div class="subject-card type-attitude">
+            <div class="card-header"><span class="subject-name">社会与人文</span><span class="subject-tag tag-attitude">态度</span></div>
+            <div class="scores-grid"><div class="score-item"><div class="score-label">一</div><div class="score-value">86</div></div><div class="score-item"><div class="score-label">二</div><div class="score-value">89</div></div><div class="score-item"><div class="score-label">三</div><div class="score-value">92</div></div></div>
+            <div class="strategy-text"><strong>策略：</strong>背诵+答题踩点，当文科来刷分。</div>
+        </div>
+        <div class="subject-card type-attitude">
+            <div class="card-header"><span class="subject-name">生命科学</span><span class="subject-tag tag-attitude">态度</span></div>
+            <div class="scores-grid"><div class="score-item"><div class="score-label">一</div><div class="score-value">87</div></div><div class="score-item"><div class="score-label">二</div><div class="score-value">89</div></div><div class="score-item"><div class="score-label">三</div><div class="score-value">92</div></div></div>
+            <div class="strategy-text"><strong>策略：</strong>实验报告完美，知识点背熟。</div>
+        </div>
+    </div>
+
+    <div class="section-title" style="margin-top: 24px;"> 王牌与极客主场 (拉高均分)</div>
+    <div class="card-list">
         <div class="subject-card type-core">
             <div class="card-header"><span class="subject-name">数学</span><span class="subject-tag tag-core">王牌</span></div>
             <div class="scores-grid"><div class="score-item"><div class="score-label">一</div><div class="score-value">94</div></div><div class="score-item"><div class="score-label">二</div><div class="score-value">96</div></div><div class="score-item"><div class="score-label">三</div><div class="score-value">98</div></div></div>
+            <div class="strategy-text"><strong>策略：</strong>配合拔尖班，死磕压轴题，用接近满分拉高均分。</div>
+        </div>
+        <div class="subject-card type-core">
+            <div class="card-header"><span class="subject-name">商业数据管理</span><span class="subject-tag tag-core">王牌</span></div>
+            <div class="scores-grid"><div class="score-item"><div class="score-label">一</div><div class="score-value">94</div></div><div class="score-item"><div class="score-label">二</div><div class="score-value">96</div></div><div class="score-item"><div class="score-label">三</div><div class="score-value">97</div></div></div>
+            <div class="strategy-text"><strong>策略：</strong>保持数据敏感度，作业追求完美，稳拿高分。</div>
+        </div>
+        <div class="subject-card type-core">
+            <div class="card-header"><span class="subject-name">材料化学与工程</span><span class="subject-tag tag-core">王牌</span></div>
+            <div class="scores-grid"><div class="score-item"><div class="score-label">一</div><div class="score-value">93</div></div><div class="score-item"><div class="score-label">二</div><div class="score-value">95</div></div><div class="score-item"><div class="score-label">三</div><div class="score-value">96</div></div></div>
+            <div class="strategy-text"><strong>策略：</strong>理科基本盘，消灭粗心失分。</div>
+        </div>
+        <div class="subject-card type-core">
+            <div class="card-header"><span class="subject-name">物理科技与工程</span><span class="subject-tag tag-core">中坚</span></div>
+            <div class="scores-grid"><div class="score-item"><div class="score-label">一</div><div class="score-value">91</div></div><div class="score-item"><div class="score-label">二</div><div class="score-value">93</div></div><div class="score-item"><div class="score-label">三</div><div class="score-value">94</div></div></div>
+            <div class="strategy-text"><strong>策略：</strong>建立错题本，配合培优班稳步爬升。</div>
+        </div>
+        <div class="subject-card type-core">
+            <div class="card-header"><span class="subject-name">ICT网络</span><span class="subject-tag tag-core">中坚</span></div>
+            <div class="scores-grid"><div class="score-item"><div class="score-label">一</div><div class="score-value">91</div></div><div class="score-item"><div class="score-label">二</div><div class="score-value">93</div></div><div class="score-item"><div class="score-label">三</div><div class="score-value">94</div></div></div>
+            <div class="strategy-text"><strong>策略：</strong>稳扎稳打，实操与理论并重。</div>
         </div>
         <div class="subject-card type-geek">
-            <div class="card-header"><span class="subject-name">HCIA / 多媒体</span><span class="subject-tag tag-geek">极客</span></div>
+            <div class="card-header"><span class="subject-name">多媒体制作</span><span class="subject-tag tag-geek">极客</span></div>
             <div class="scores-grid"><div class="score-item"><div class="score-label">一</div><div class="score-value">88</div></div><div class="score-item"><div class="score-label">二</div><div class="score-value">92</div></div><div class="score-item"><div class="score-label">三</div><div class="score-value">95</div></div></div>
+            <div class="strategy-text"><strong>策略：</strong>用前端/Python技术降维打击，做出全级最惊艳的作业。</div>
+        </div>
+        <div class="subject-card type-geek">
+            <div class="card-header"><span class="subject-name">HCIA人工智能</span><span class="subject-tag tag-geek">极客</span></div>
+            <div class="scores-grid"><div class="score-item"><div class="score-label">一</div><div class="score-value">88</div></div><div class="score-item"><div class="score-label">二</div><div class="score-value">92</div></div><div class="score-item"><div class="score-label">三</div><div class="score-value">95</div></div></div>
+            <div class="strategy-text"><strong>策略：</strong>结合实操，冲刺高分，为面试积累硬核素材。</div>
         </div>
     </div>
 
@@ -305,7 +354,7 @@
                         btnStart.innerText = 'FINISHED!';
                         btnStart.style.background = 'var(--accent-green)';
                         if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
-                        alert(' 番茄钟结束！休息 5 分钟，去喝杯水或看看 GitHub。');
+                        alert('🍅 番茄钟结束！休息 5 分钟，去喝杯水或看看 GitHub。');
                     }
                 }, 1000);
             }
