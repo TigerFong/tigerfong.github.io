@@ -2,203 +2,411 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>上海交大保送作战面板</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>高二冲刺 Dashboard</title>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="高二目标">
+    <meta name="theme-color" content="#0f172a">
+    <link rel="icon" href="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f3af.png">
+    <link rel="apple-touch-icon" href="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f3af.png">
+
     <style>
         :root {
-            --bg: #121212;
-            --card-bg: #1e1e1e;
-            --text: #e0e0e0;
-            --danger: #ff4c4c;
-            --warning: #ffb84d;
-            --success: #4caf50;
-            --accent: #3b82f6;
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-main: #f8fafc;
+            --text-sub: #94a3b8;
+            --accent-blue: #38bdf8;
+            --accent-green: #4ade80;
+            --accent-red: #f43f5e;
+            --accent-orange: #fb923c;
+            --accent-yellow: #fbbf24;
+            --border-color: #334155;
         }
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
-            margin: 0;
-            padding: 15px;
-            line-height: 1.5;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.4;
+            padding: 12px;
+            padding-bottom: 40px;
+            padding-bottom: env(safe-area-inset-bottom);
         }
-        .container { max-width: 800px; margin: 0 auto; }
-        header {
-            text-align: center;
-            margin-bottom: 20px;
-            border-bottom: 2px solid #333;
-            padding-bottom: 15px;
-        }
-        h1 { margin: 0; font-size: 24px; color: #fff; }
-        .countdown { font-size: 18px; color: var(--warning); font-weight: bold; margin-top: 5px; }
         
-        .grid { display: grid; grid-template-columns: 1fr; gap: 15px; }
-        @media(min-width: 600px) { .grid { grid-template-columns: 1fr 1fr; } }
+        /* 首屏紧凑布局优化 */
+        .header { text-align: center; margin-bottom: 12px; padding-top: 5px; }
+        .header h1 { font-size: 20px; font-weight: 700; margin-bottom: 4px; background: linear-gradient(90deg, var(--accent-blue), var(--accent-green)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .header p { font-size: 11px; color: var(--text-sub); }
+        
+        .time-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
+        .time-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 10px; padding: 10px; text-align: center; }
+        .time-card .label { font-size: 11px; color: var(--text-sub); margin-bottom: 2px; }
+        .time-card .value { font-size: 20px; font-weight: 800; color: var(--accent-yellow); }
+        .time-card .unit { font-size: 10px; color: var(--text-sub); }
+        .time-card.urgent .value { color: var(--accent-red); animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.7; } 100% { opacity: 1; } }
 
-        .card {
-            background: var(--card-bg);
-            padding: 15px;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-        }
-        .card h2 { margin-top: 0; font-size: 18px; border-bottom: 1px solid #333; padding-bottom: 8px; }
+        /* SOP 模块 */
+        .sop-card { background: linear-gradient(135deg, rgba(56, 189, 248, 0.1), rgba(74, 222, 128, 0.1)); border: 1px solid var(--accent-blue); border-radius: 12px; padding: 12px; margin-bottom: 12px; }
+        .sop-title { font-size: 13px; font-weight: 700; color: var(--accent-blue); margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+        .sop-list { display: flex; flex-direction: column; gap: 6px; }
+        .sop-item { display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer; }
+        .sop-check { width: 18px; height: 18px; border: 2px solid var(--text-sub); border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 12px; color: transparent; transition: all 0.2s; flex-shrink: 0; }
+        .sop-item.done .sop-check { background: var(--accent-green); border-color: var(--accent-green); color: #fff; }
+        .sop-item.done .sop-text { text-decoration: line-through; color: var(--text-sub); }
+
+        /* 交大笔试专项 */
+        .sjtu-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 12px; margin-bottom: 12px; }
+        .sjtu-header { font-size: 13px; font-weight: 700; color: var(--accent-red); margin-bottom: 10px; border-left: 3px solid var(--accent-red); padding-left: 8px; }
+        .vocab-progress { margin-bottom: 10px; }
+        .vocab-info { display: flex; justify-content: space-between; font-size: 11px; color: var(--text-sub); margin-bottom: 4px; }
+        .vocab-bar-bg { background: rgba(255,255,255,0.05); height: 6px; border-radius: 3px; overflow: hidden; }
+        .vocab-bar-fill { background: linear-gradient(90deg, var(--accent-red), var(--accent-orange)); height: 100%; border-radius: 3px; transition: width 0.5s ease; }
+        .sjtu-focus { font-size: 11px; color: var(--text-sub); line-height: 1.5; }
+        .sjtu-focus span { color: var(--text-main); font-weight: 600; }
+
+        /* 打卡模块 */
+        .habit-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; padding-left: 8px; border-left: 3px solid var(--accent-green); }
+        .habit-header .title { font-size: 14px; font-weight: 600; }
+        .habit-header .streak { font-size: 12px; color: var(--accent-orange); font-weight: 700; }
+        .habit-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 16px; }
+        .habit-btn { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 10px; padding: 10px 8px; text-align: center; cursor: pointer; transition: all 0.2s; position: relative; }
+        .habit-btn:active { transform: scale(0.96); }
+        .habit-btn.completed { border-color: var(--accent-green); background: rgba(74, 222, 128, 0.08); }
+        .habit-icon { font-size: 20px; margin-bottom: 4px; display: block; }
+        .habit-name { font-size: 12px; font-weight: 600; color: var(--text-main); }
+        .habit-check { position: absolute; top: 4px; right: 4px; width: 14px; height: 14px; border-radius: 50%; border: 2px solid var(--border-color); display: flex; align-items: center; justify-content: center; font-size: 8px; color: transparent; }
+        .habit-btn.completed .habit-check { background: var(--accent-green); border-color: var(--accent-green); color: #fff; }
+
+        /* 成绩与缺口模块 */
+        .section-title { font-size: 14px; font-weight: 600; margin-bottom: 10px; padding-left: 8px; border-left: 3px solid var(--accent-blue); margin-top: 16px; }
+        .card-list { display: flex; flex-direction: column; gap: 8px; }
+        .subject-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 10px; padding: 12px; position: relative; }
+        .subject-card::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; border-radius: 10px 0 0 10px; }
+        .subject-card.type-core::before { background: var(--accent-blue); }
+        .subject-card.type-attitude::before { background: var(--accent-green); }
+        .subject-card.type-danger::before { background: var(--accent-red); }
         
-        /* 分数条样式 */
-        .score-row { display: flex; justify-content: space-between; margin-bottom: 5px; font-size: 14px; font-weight: bold;}
-        .progress-bg { background: #333; height: 10px; border-radius: 5px; overflow: hidden; margin-bottom: 12px;}
-        .progress-bar { height: 100%; transition: width 0.5s; }
+        /* 红绿灯背景提示 */
+        .subject-card.bg-danger { background: rgba(244, 63, 94, 0.05); border-color: rgba(244, 63, 94, 0.3); }
+        .subject-card.bg-safe { background: rgba(74, 222, 128, 0.05); border-color: rgba(74, 222, 128, 0.3); }
+
+        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+        .subject-name { font-size: 14px; font-weight: 600; }
+        .subject-tags { display: flex; gap: 4px; }
+        .tag { font-size: 9px; padding: 2px 5px; border-radius: 3px; font-weight: 600; }
+        .tag-weight { background: rgba(244, 63, 94, 0.2); color: var(--accent-red); }
+        .tag-core { background: rgba(56, 189, 248, 0.15); color: var(--accent-blue); }
+        .tag-attitude { background: rgba(74, 222, 128, 0.15); color: var(--accent-green); }
+        .tag-danger { background: rgba(244, 63, 94, 0.15); color: var(--accent-red); }
+
+        .score-row { display: flex; justify-content: space-between; align-items: center; }
+        .score-target { font-size: 12px; color: var(--text-sub); }
+        .score-target span { color: var(--text-main); font-weight: 700; font-size: 14px; }
+        .gap-indicator { font-size: 12px; font-weight: 700; padding: 2px 6px; border-radius: 4px; }
+        .gap-danger { background: rgba(244, 63, 94, 0.15); color: var(--accent-red); }
+        .gap-safe { background: rgba(74, 222, 128, 0.15); color: var(--accent-green); }
         
-        /* 专项任务样式 */
-        .task-item {
-            display: flex; align-items: center; margin-bottom: 10px; cursor: pointer;
-            padding: 8px; background: #252525; border-radius: 6px;
-        }
-        .task-item input { margin-right: 10px; width: 18px; height: 18px; cursor: pointer;}
-        .task-item.completed label { text-decoration: line-through; color: #777; }
-        .task-desc { font-size: 12px; color: #888; margin-left: 28px; margin-top: -5px; margin-bottom: 10px;}
+        .strategy-text { font-size: 11px; color: var(--text-sub); margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--border-color); }
+        .strategy-text strong { color: var(--text-main); }
+
+        .footer-note { text-align: center; font-size: 11px; color: var(--text-sub); margin-top: 24px; padding: 12px; background: rgba(56, 189, 248, 0.05); border-radius: 10px; border: 1px dashed var(--accent-blue); }
     </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>🎯 交大保送作战面板</h1>
-            <div class="countdown" id="countdown">距离决战还有: 计算中...</div>
-        </header>
+    <div class="header">
+        <h1>高二冲刺作战指挥系统</h1>
+        <p>校内加权90+拿门票 | 交大笔试是战场</p>
+    </div>
 
-        <div class="grid">
-            <!-- 核心成绩与缺口 -->
-            <div class="card">
-                <h2>📊 成绩与缺口分析</h2>
-                <div id="scores-container"></div>
-            </div>
-
-            <!-- 交大笔试专项 -->
-            <div class="card">
-                <h2>⚔️ 交大笔试特训 (中英数)</h2>
-                <div class="score-row"><span>英语词汇量 (目标4500)</span> <span id="vocab-text">2797 / 4500</span></div>
-                <div class="progress-bg"><div class="progress-bar" id="vocab-bar" style="width: 62%; background: var(--warning);"></div></div>
-                
-                <div class="score-row"><span>语文基础分守住 (默写/文言)</span> <span>必须100%</span></div>
-                <div class="progress-bg"><div class="progress-bar" style="width: 100%; background: var(--success);"></div></div>
-                <p style="font-size:12px; color:#aaa; margin-top:5px;">* 语文是你的生死线，理科决定上限，语文决定你能不能进考场。</p>
-            </div>
-
-            <!-- 每日打卡 -->
-            <div class="card" style="grid-column: 1 / -1;">
-                <h2>🔥 每日极客打卡 (连续 <span id="streak">0</span> 天)</h2>
-                <div id="tasks-container"></div>
-                <button onclick="resetTasks()" style="margin-top:10px; background:#333; color:#fff; border:none; padding:5px 10px; border-radius:5px; cursor:pointer;">手动重置今日打卡</button>
-            </div>
+    <!-- 1. 时间与进度 -->
+    <div class="time-grid">
+        <div class="time-card" id="card-p1">
+            <div class="label">第一段考试 (12.2)</div>
+            <div class="value" id="days-p1">--</div>
+            <div class="unit">Days</div>
+        </div>
+        <div class="time-card">
+            <div class="label">寒假解放 (1.31)</div>
+            <div class="value" id="days-break">--</div>
+            <div class="unit">Days</div>
         </div>
     </div>
 
+    <!-- 2. SOP：今日只做这三件事 -->
+    <div class="sop-card">
+        <div class="sop-title">🎯 今日只做这三件事 (SOP)</div>
+        <div class="sop-list" id="sop-list">
+            <div class="sop-item" data-sop="0"><div class="sop-check">✓</div><div class="sop-text">刷30个英语单词 (目标4500)</div></div>
+            <div class="sop-item" data-sop="1"><div class="sop-check">✓</div><div class="sop-text">背3个文言实词/文学常识</div></div>
+            <div class="sop-item" data-sop="2"><div class="sop-check">✓</div><div class="sop-text">搞定一道理科压轴题</div></div>
+        </div>
+    </div>
+
+    <!-- 3. 交大笔试专项 -->
+    <div class="sjtu-card">
+        <div class="sjtu-header">🔥 交大笔试专项 (真正的战场)</div>
+        <div class="vocab-progress">
+            <div class="vocab-info">
+                <span>📖 英语词汇量 (交大安全线)</span>
+                <span id="vocab-text">2797 / 4500</span>
+            </div>
+            <div class="vocab-bar-bg">
+                <div class="vocab-bar-fill" id="vocab-fill" style="width: 0%"></div>
+            </div>
+        </div>
+        <div class="sjtu-focus">
+             语文：<span id="focus-chinese">文言文实词/默写</span><br>
+            📐 数学：<span id="focus-math">内地高考/交大风格压轴题刷题</span>
+        </div>
+    </div>
+
+    <!-- 4. 每日打卡 -->
+    <div class="habit-header">
+        <div class="title">✅ 每日极客打卡</div>
+        <div class="streak" id="streak-display"> 连续 0 天</div>
+    </div>
+    <div class="habit-grid" id="habit-grid">
+        <!-- JS 动态渲染 -->
+    </div>
+
+    <!-- 5. 校内成绩与缺口预警 -->
+    <div class="section-title">📊 校内加权成绩与缺口预警 (总权重14.5)</div>
+    <div class="card-list" id="subject-list">
+        <!-- JS 动态渲染 -->
+    </div>
+
+    <div class="footer-note">
+        💡 <strong>git commit -m "daily grind"</strong><br>
+        保持 GitHub 活跃，用代码实力在面试中“乱杀”！
+    </div>
+
     <script>
-        // ================= 数据配置区（每次考试后只改这里）=================
-        const data = {
-            chinese: { current: 69, target: 80, name: "语文" }, // 红色警报区
-            english: { current: 82, target: 85, name: "英语" },
-            math: { current: 100, target: 95, name: "数学" }, // 已经超神
-            physics: { current: 95, target: 90, name: "物理" },
-            chemistry: { current: 84, target: 88, name: "化学" },
-            vocab: { current: 2797, target: 4500 }
+        // ==========================================
+        // 🌟 核心配置区 (以后改分数只改这里！) 
+        // ==========================================
+        const CONFIG = {
+            sjtuExam: {
+                vocabCurrent: 2797, // 当前词汇量
+                vocabTarget: 4500,  // 交大笔试安全线
+                focusChinese: '文言文实词/默写得分率',
+                focusMath: '内地高考/交大风格压轴题刷题量'
+            },
+            habits: [
+                { id: 'english', icon: '📖', name: '背单词30个' },
+                { id: 'chinese', icon: '📜', name: '文言实词/阅读' },
+                { id: 'github', icon: '💻', name: 'GitHub Commit' },
+                { id: 'sport', icon: '🏃', name: '体育特训' },
+                { id: 'review', icon: '📝', name: '错题清零' }
+            ],
+            // 科目数据：current为当前最新分数，target为第三段目标分数
+            subjects: [
+                { id: 'math', name: '数学', weight: 1.5, current: 100, target: 98, tag: '王牌', type: 'core' },
+                { id: 'chinese', name: '中文', weight: 1.5, current: 69, target: 88, tag: '核心', type: 'danger' },
+                { id: 'english', name: '英文', weight: 1.5, current: 79, target: 88, tag: '提分快', type: 'core' },
+                { id: 'business', name: '商业数据', weight: 1.0, current: 92, target: 97, tag: '王牌', type: 'core' },
+                { id: 'material', name: '材料化学', weight: 1.0, current: 92, target: 96, tag: '王牌', type: 'core' },
+                { id: 'multimedia', name: '多媒体', weight: 1.0, current: 83, target: 95, tag: '极客', type: 'core' },
+                { id: 'hcia', name: 'HCIA AI', weight: 1.0, current: 83, target: 95, tag: '极客', type: 'core' },
+                { id: 'physics', name: '物理', weight: 1.0, current: 89, target: 94, tag: '中坚', type: 'core' },
+                { id: 'ict', name: 'ICT网络', weight: 1.0, current: 89, target: 94, tag: '中坚', type: 'core' },
+                { id: 'civic', name: '公民', weight: 1.0, current: 81, target: 92, tag: '态度', type: 'attitude' },
+                { id: 'social', name: '社会人文', weight: 1.0, current: 84, target: 92, tag: '态度', type: 'attitude' },
+                { id: 'biology', name: '生命科学', weight: 1.0, current: 85, target: 92, tag: '态度', type: 'attitude' },
+                { id: 'sport', name: '体育', weight: 1.0, current: 71, target: 77, tag: '红线', type: 'danger' }
+            ]
         };
 
-        const tasks = [
-            { id: "t1", text: "🧠 语文：背 3 个文言文实词/虚词", desc: "死分，像背化学方程式一样" },
-            { id: "t2", text: "📖 语文：做 1 篇阅读并总结踩分公式", desc: "不要凭感觉，要按点作答" },
-            { id: "t3", text: "📱 英语：墨墨背单词 30新+100复习", desc: "词汇量是生命线" },
-            { id: "t4", text: "📐 数理化：保持手感，刷题", desc: "你的王牌，绝不能掉" }
-        ];
-
-        // 决战日期：2027年交大保送考大概在高三上（2027年10月左右）
-        const targetDate = new Date("2027-10-01T00:00:00").getTime();
-        // ================================================================
-
-        // 渲染成绩单
-        const scoresDiv = document.getElementById("scores-container");
-        for (const [key, item] of Object.entries(data)) {
-            if(key === 'vocab') continue;
-            let gap = (item.target - item.current).toFixed(1);
-            let isDanger = gap > 5; // 缺口大于5分算危险
-            let color = isDanger ? "var(--danger)" : (gap > 0 ? "var(--warning)" : "var(--success)");
-            let width = Math.min((item.current / item.target) * 100, 100);
-            
-            let gapText = gap > 0 ? `缺口: ${gap}分` : `超目标: ${Math.abs(gap)}分`;
-            
-            scoresDiv.innerHTML += `
-                <div class="score-row">
-                    <span style="color: ${isDanger ? 'var(--danger)' : 'var(--text)'}">${item.name}</span>
-                    <span style="color: ${color}">${item.current} / ${item.target} (${gapText})</span>
-                </div>
-                <div class="progress-bg">
-                    <div class="progress-bar" style="width: ${width}%; background: ${color};"></div>
-                </div>
-            `;
+        // ==========================================
+        // 渲染逻辑
+        // ==========================================
+        
+        // 1. 渲染交大笔试专项
+        function renderSJTU() {
+            const { vocabCurrent, vocabTarget, focusChinese, focusMath } = CONFIG.sjtuExam;
+            document.getElementById('vocab-text').innerText = `${vocabCurrent} / ${vocabTarget}`;
+            document.getElementById('vocab-fill').style.width = `${Math.min(100, (vocabCurrent / vocabTarget) * 100)}%`;
+            document.getElementById('focus-chinese').innerText = focusChinese;
+            document.getElementById('focus-math').innerText = focusMath;
         }
 
-        // 渲染词汇量
-        document.getElementById("vocab-text").innerText = `${data.vocab.current} / ${data.vocab.target}`;
-        let vocabPct = (data.vocab.current / data.vocab.target) * 100;
-        document.getElementById("vocab-bar").style.width = `${vocabPct}%`;
+        // 2. 渲染科目与缺口 (Gap)
+        function renderSubjects() {
+            const list = document.getElementById('subject-list');
+            list.innerHTML = '';
+            
+            // 分组：加权核心、普通、态度、红线
+            const groups = {
+                core: CONFIG.subjects.filter(s => s.weight === 1.5),
+                normal: CONFIG.subjects.filter(s => s.weight === 1.0 && s.type === 'core'),
+                attitude: CONFIG.subjects.filter(s => s.type === 'attitude'),
+                danger: CONFIG.subjects.filter(s => s.type === 'danger' && s.weight === 1.0)
+            };
 
-        // 倒计时逻辑
-        setInterval(() => {
-            const now = new Date().getTime();
-            const distance = targetDate - now;
-            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            document.getElementById("countdown").innerText = `距离决战还有: ${days} 天`;
-        }, 1000);
+            const titles = { core: ' 核心加权科 (权重 x1.5)', normal: '👑 王牌与极客主场', attitude: '💡 态度提分科', danger: '️ 底线防守科' };
 
-        // 打卡逻辑 (LocalStorage)
-        const taskContainer = document.getElementById("tasks-container");
-        let completedTasks = JSON.parse(localStorage.getItem("tasks_" + new Date().toDateString())) || [];
-        let streak = parseInt(localStorage.getItem("streak")) || 0;
+            for (const [key, subjects] of Object.entries(groups)) {
+                if (subjects.length === 0) continue;
+                
+                const titleDiv = document.createElement('div');
+                titleDiv.className = 'section-title';
+                titleDiv.style.marginTop = '16px';
+                titleDiv.innerText = titles[key];
+                list.appendChild(titleDiv);
 
-        function renderTasks() {
-            taskContainer.innerHTML = "";
-            tasks.forEach(task => {
-                const isChecked = completedTasks.includes(task.id);
-                taskContainer.innerHTML += `
-                    <div>
-                        <label class="task-item ${isChecked ? 'completed' : ''}">
-                            <input type="checkbox" ${isChecked ? 'checked' : ''} onchange="toggleTask('${task.id}')">
-                            <span>${task.text}</span>
-                        </label>
-                        <div class="task-desc">${task.desc}</div>
-                    </div>
+                subjects.forEach(sub => {
+                    const gap = sub.target - sub.current;
+                    const isDanger = gap > 0;
+                    const bgClass = isDanger ? 'bg-danger' : 'bg-safe';
+                    const gapHtml = isDanger 
+                        ? `<span class="gap-indicator gap-danger">🔴 缺口: ${gap}分</span>` 
+                        : `<span class="gap-indicator gap-safe"> 安全</span>`;
+                    
+                    const weightTag = sub.weight === 1.5 ? `<span class="tag tag-weight">x1.5</span>` : '';
+                    
+                    const card = document.createElement('div');
+                    card.className = `subject-card type-${sub.type} ${bgClass}`;
+                    card.innerHTML = `
+                        <div class="card-header">
+                            <span class="subject-name">${sub.name}</span>
+                            <div class="subject-tags">
+                                ${weightTag}
+                                <span class="tag tag-${sub.type}">${sub.tag}</span>
+                            </div>
+                        </div>
+                        <div class="score-row">
+                            <div class="score-target">当前: <span>${sub.current}</span> / 目标: <span>${sub.target}</span></div>
+                            ${gapHtml}
+                        </div>
+                    `;
+                    list.appendChild(card);
+                });
+            }
+        }
+
+        // 3. 渲染打卡与 Streak
+        function renderHabits() {
+            const grid = document.getElementById('habit-grid');
+            grid.innerHTML = '';
+            CONFIG.habits.forEach(habit => {
+                const btn = document.createElement('div');
+                btn.className = 'habit-btn';
+                btn.setAttribute('data-habit', habit.id);
+                btn.innerHTML = `
+                    <div class="habit-check">✓</div>
+                    <span class="habit-icon">${habit.icon}</span>
+                    <div class="habit-name">${habit.name}</div>
                 `;
+                grid.appendChild(btn);
             });
-            document.getElementById("streak").innerText = streak;
+            loadHabitsAndStreak();
         }
 
-        function toggleTask(id) {
-            if (completedTasks.includes(id)) {
-                completedTasks = completedTasks.filter(t => t !== id);
-            } else {
-                completedTasks.push(id);
-            }
-            localStorage.setItem("tasks_" + new Date().toDateString(), JSON.stringify(completedTasks));
+        // 4. 倒计时
+        function updateTime() {
+            const now = new Date();
+            const dateP1 = new Date('2026-12-02'); 
+            const dateBreak = new Date('2027-01-31'); 
             
-            // 简单的连续天数逻辑
-            if(completedTasks.length === tasks.length) {
-                let lastDone = localStorage.getItem("lastDone");
-                let today = new Date().toDateString();
-                if(lastDone !== today) {
-                    streak++;
-                    localStorage.setItem("streak", streak);
-                    localStorage.setItem("lastDone", today);
-                }
+            const daysP1 = Math.ceil((dateP1 - now) / (1000 * 60 * 60 * 24));
+            const daysBreak = Math.ceil((dateBreak - now) / (1000 * 60 * 60 * 24));
+            
+            document.getElementById('days-p1').innerText = daysP1 > 0 ? daysP1 : 0;
+            document.getElementById('days-break').innerText = daysBreak > 0 ? daysBreak : 0;
+
+            if (daysP1 <= 7 && daysP1 > 0) {
+                document.getElementById('card-p1').classList.add('urgent');
             }
-            renderTasks();
         }
 
-        function resetTasks() {
-            completedTasks = [];
-            localStorage.setItem("tasks_" + new Date().toDateString(), JSON.stringify(completedTasks));
-            renderTasks();
+        // ==========================================
+        // 交互逻辑 (LocalStorage)
+        // ==========================================
+        function loadHabitsAndStreak() {
+            const todayStr = new Date().toDateString();
+            const yesterdayStr = new Date(Date.now() - 86400000).toDateString();
+            
+            const savedData = JSON.parse(localStorage.getItem('habits_data') || '{}');
+            const streak = parseInt(localStorage.getItem('streak') || '0');
+            const lastCheckIn = localStorage.getItem('lastCheckInDate');
+
+            // 更新 Streak 显示
+            document.getElementById('streak-display').innerText = `🔥 连续 ${streak} 天`;
+
+            // 渲染打卡状态
+            const habitBtns = document.querySelectorAll('.habit-btn');
+            if (savedData.date !== todayStr) {
+                habitBtns.forEach(btn => btn.classList.remove('completed'));
+            } else {
+                habitBtns.forEach(btn => {
+                    const id = btn.getAttribute('data-habit');
+                    if (savedData.habits && savedData.habits[id]) btn.classList.add('completed');
+                });
+            }
+
+            // 绑定点击事件
+            habitBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    btn.classList.toggle('completed');
+                    const id = btn.getAttribute('data-habit');
+                    const data = JSON.parse(localStorage.getItem('habits_data') || '{ "habits": {} }');
+                    data.date = todayStr;
+                    if (!data.habits) data.habits = {};
+                    data.habits[id] = btn.classList.contains('completed');
+                    localStorage.setItem('habits_data', JSON.stringify(data));
+
+                    // 计算 Streak
+                    let currentStreak = parseInt(localStorage.getItem('streak') || '0');
+                    const lastDate = localStorage.getItem('lastCheckInDate');
+                    
+                    if (btn.classList.contains('completed')) {
+                        if (lastDate === yesterdayStr) currentStreak++;
+                        else if (lastDate !== todayStr) currentStreak = 1;
+                    } else {
+                        // 取消打卡不扣减 streak，但逻辑上可以复杂化，这里保持简单
+                    }
+                    
+                    localStorage.setItem('streak', currentStreak);
+                    localStorage.setItem('lastCheckInDate', todayStr);
+                    document.getElementById('streak-display').innerText = `🔥 连续 ${currentStreak} 天`;
+                    if (navigator.vibrate) navigator.vibrate(50);
+                });
+            });
         }
 
-        renderTasks();
+        // SOP 打卡逻辑
+        function initSOP() {
+            const todayStr = new Date().toDateString();
+            const savedSOP = JSON.parse(localStorage.getItem('sop_data') || '{}');
+            const sopItems = document.querySelectorAll('.sop-item');
+            
+            if (savedSOP.date === todayStr && savedSOP.items) {
+                sopItems.forEach((item, index) => {
+                    if (savedSOP.items[index]) item.classList.add('done');
+                });
+            }
+
+            sopItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    item.classList.toggle('done');
+                    const data = { date: todayStr, items: [] };
+                    sopItems.forEach(i => data.items.push(i.classList.contains('done')));
+                    localStorage.setItem('sop_data', JSON.stringify(data));
+                });
+            });
+        }
+
+        // 初始化
+        renderSJTU();
+        renderSubjects();
+        renderHabits();
+        updateTime();
+        initSOP();
+        setInterval(updateTime, 60000);
+
     </script>
 </body>
 </html>
