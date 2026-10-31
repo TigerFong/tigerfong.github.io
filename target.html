@@ -52,7 +52,6 @@
         .habit-check { position: absolute; top: 4px; right: 4px; width: 14px; height: 14px; border-radius: 50%; border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 8px; color: transparent; }
         .habit-btn.completed .habit-check { background: var(--green); border-color: var(--green); color: #fff; }
 
-        /* 新增：平均分追踪模块样式 */
         .avg-tracker { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 16px 0; }
         .avg-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 10px; text-align: center; position: relative; overflow: hidden; }
         .avg-card .label { font-size: 11px; color: var(--sub); margin-bottom: 4px; }
@@ -92,7 +91,7 @@
         .score-row { display: flex; justify-content: space-between; align-items: center; }
         .current-val { font-size: 18px; font-weight: 800; color: var(--yellow); cursor: pointer; border-bottom: 1px dashed var(--sub); }
         .current-val.empty { color: var(--sub); font-size: 14px; }
-        .score-input { width: 60px; font-size: 18px; font-weight: 800; background: transparent; border: none; border-bottom: 2px solid var(--blue); color: var(--yellow); text-align: center; outline: none; }
+        .score-input { width: 90px; font-size: 16px; font-weight: 800; background: transparent; border: none; border-bottom: 2px solid var(--blue); color: var(--yellow); text-align: center; outline: none; }
         
         .gap-indicator { font-size: 11px; font-weight: 700; padding: 3px 6px; border-radius: 4px; }
         .gap-danger { background: rgba(244, 63, 94, 0.2); color: var(--red); }
@@ -142,7 +141,6 @@
     </div>
     <div class="habit-grid" id="habit-grid"></div>
 
-    <!-- 新增：阶段平均分追踪 -->
     <div class="avg-tracker">
         <div class="avg-card avg-c1"><div class="label">第一段目标</div><div class="value">86.5</div></div>
         <div class="avg-card avg-c2"><div class="label">第二段目标</div><div class="value">89.0</div></div>
@@ -151,7 +149,7 @@
     </div>
 
     <div class="section-title">
-        <span> 校内加权成绩与缺口预警</span>
+        <span>📊 校内加权成绩与缺口预警</span>
         <div style="display:flex; gap:8px; align-items:center;">
             <span id="current-avg-display" style="font-size:12px; color:var(--yellow); font-weight:bold;"></span>
             <button class="reset-btn" onclick="resetScores()">重置</button>
@@ -254,17 +252,35 @@
                 titleDiv.innerText = g.title; list.appendChild(titleDiv);
 
                 g.items.forEach(function(sub) {
-                    var current = scores[sub.id];
-                    var isFilled = (current !== undefined && current !== null && current !== '');
-                    var gap = isFilled ? (sub.t3 - parseFloat(current)) : null;
+                    var rawVal = scores[sub.id];
+                    var isFilled = (rawVal !== undefined && rawVal !== null && rawVal !== '');
+                    var currentScore = 0;
+                    var displayVal = '点击录入';
+                    var count = 0;
+                    
+                    if (isFilled) {
+                        var parts = rawVal.toString().split(',');
+                        var sum = 0;
+                        for(var i=0; i<parts.length; i++){
+                            var v = parseFloat(parts[i]);
+                            if(!isNaN(v)) { sum += v; count++; }
+                        }
+                        if(count > 0) {
+                            currentScore = sum / count;
+                            // 如果填了多个分数，显示平均分并加上 (均) 标识
+                            displayVal = parts.length > 1 ? currentScore.toFixed(1) + '(均)' : currentScore;
+                        }
+                    }
 
-                    if (isFilled) { totalS += parseFloat(current) * sub.weight; totalW += sub.weight; }
+                    var gap = isFilled && count > 0 ? (sub.t3 - currentScore) : null;
+                    
+                    if (isFilled && count > 0) { totalS += currentScore * sub.weight; totalW += sub.weight; }
 
                     var gapHtml = '<span class="gap-indicator gap-wait">待考</span>'; var bgClass = '';
-                    if (isFilled) {
+                    if (isFilled && count > 0) {
                         var gapDisplay = gap % 1 === 0 ? gap : gap.toFixed(1);
                         if (gap > 0) { gapHtml = '<span class="gap-indicator gap-danger">🔴 缺口:' + gapDisplay + '</span>'; bgClass = 'bg-danger'; }
-                        else { gapHtml = '<span class="gap-indicator gap-safe"> 安全</span>'; bgClass = 'bg-safe'; }
+                        else { gapHtml = '<span class="gap-indicator gap-safe">🟢 安全</span>'; bgClass = 'bg-safe'; }
                     }
 
                     var wTag = sub.weight === 1.5 ? '<span class="tag tag-weight">x1.5</span>' : '';
@@ -272,12 +288,11 @@
                     card.innerHTML = 
                         '<div class="card-header"><span class="subject-name">' + sub.name + '</span><div class="subject-tags">' + wTag + '<span class="tag tag-' + sub.type + '">' + sub.tag + '</span></div></div>' +
                         '<div class="targets-grid"><div class="target-item"><div class="target-label">第一段</div><div class="target-val">' + sub.t1 + '</div></div><div class="target-item"><div class="target-label">第二段</div><div class="target-val">' + sub.t2 + '</div></div><div class="target-item"><div class="target-label">第三段</div><div class="target-val">' + sub.t3 + '</div></div></div>' +
-                        '<div class="score-row"><div><span style="font-size:11px;color:var(--sub)">当前:</span> <span class="current-val ' + (!isFilled ? 'empty' : '') + '" onclick="editScore(\'' + sub.id + '\', this)">' + (isFilled ? current : '点击录入') + '</span></div>' + gapHtml + '</div>';
+                        '<div class="score-row"><div><span style="font-size:11px;color:var(--sub)">当前:</span> <span class="current-val ' + (!isFilled ? 'empty' : '') + '" onclick="editScore(\'' + sub.id + '\', this)">' + displayVal + '</span></div>' + gapHtml + '</div>';
                     list.appendChild(card);
                 });
             });
 
-            // 更新当前预估均分
             var avgDisplay = document.getElementById('current-avg-display');
             if (totalW > 0) {
                 var avg = (totalS / totalW).toFixed(1);
@@ -290,12 +305,26 @@
 
         window.editScore = function(id, el) {
             var scores = getStorage('user_scores'); var val = scores[id] !== undefined ? scores[id] : '';
-            el.outerHTML = '<input type="number" inputmode="decimal" step="0.1" class="score-input" id="inp-' + id + '" value="' + val + '" placeholder="0-100">';
+            // placeholder 提示用逗号隔开
+            el.outerHTML = '<input type="text" inputmode="decimal" class="score-input" id="inp-' + id + '" value="' + val + '" placeholder="如 85,90,88">';
             var inp = document.getElementById('inp-' + id); inp.focus();
             var save = function() {
-                var v = parseFloat(inp.value);
-                if (isNaN(v) || v < 0 || v > 100) { renderSubjects(); return; }
-                scores[id] = v; setStorage('user_scores', scores); renderSubjects();
+                var vStr = inp.value.trim();
+                if (vStr === '') {
+                    delete scores[id];
+                    setStorage('user_scores', scores);
+                    renderSubjects();
+                    return;
+                }
+                
+                var parts = vStr.split(',');
+                var valid = true;
+                for(var i=0; i<parts.length; i++){
+                    var v = parseFloat(parts[i]);
+                    if (isNaN(v) || v < 0 || v > 100) { valid = false; break; }
+                }
+                if (!valid) { alert('请输入 0-100 的有效数字，多次成绩请用逗号(,)隔开'); renderSubjects(); return; }
+                scores[id] = vStr; setStorage('user_scores', scores); renderSubjects();
             };
             inp.onblur = save; inp.onkeydown = function(e) { if (e.key === 'Enter') inp.blur(); };
         };
